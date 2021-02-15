@@ -1,4 +1,4 @@
-package dev.angerm
+package dev.angerm.armeria_server
 
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
@@ -10,7 +10,7 @@ import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import com.uchuhimo.konf.source.yaml
-import dev.angerm.storage.DatabaseClientModule
+import dev.angerm.armeria_server.storage.DatabaseClientModule
 
 class App : AbstractModule() {
     private val sb = Server.builder()
@@ -36,7 +36,9 @@ class App : AbstractModule() {
             }
         }
             .from.yaml.file("base.yml", true)
+            .from.json.file("base.json", true)
             .from.yaml.file("$environment.yml", true)
+            .from.json.file("$environment.json", true)
             .from.systemProperties()
             .from.env()
     }

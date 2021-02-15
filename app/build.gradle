@@ -44,7 +44,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'dev.angerm.AppKt'
+    mainClass = 'dev.angerm.armeria_server.AppKt'
 }
 
 tasks.withType(JavaCompile) {
