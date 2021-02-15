@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.30'
     id 'application'
+    id "org.jlleitschuh.gradle.ktlint" version "10.0.0"
 }
 
 repositories {
@@ -13,6 +14,12 @@ targetCompatibility = 11
 dependencies {
     implementation platform('org.jetbrains.kotlin:kotlin-bom')
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    [ 'kotlinx-coroutines-reactor',
+      'kotlinx-coroutines-reactor',
+    ].each {
+        implementation "org.jetbrains.kotlinx:${it}:1.4.2"
+    }
+
 
     implementation platform("com.linecorp.armeria:armeria-bom:1.5.0")
     ['armeria',
@@ -24,10 +31,12 @@ dependencies {
     }
     runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
     runtimeOnly 'org.slf4j:log4j-over-slf4j:1.7.30'
+    implementation 'com.uchuhimo:konf:1.0.0'
 
     implementation "com.google.inject:guice:5.0.0-BETA-1"
     implementation "org.springframework.data:spring-data-r2dbc:1.2.3"
     implementation "io.r2dbc:r2dbc-postgresql:0.8.6.RELEASE"
+    implementation "io.r2dbc:r2dbc-pool:0.8.5.RELEASE"
 
     // Use the Kotlin test library.
     testImplementation 'org.jetbrains.kotlin:kotlin-test'

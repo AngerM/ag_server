@@ -2,14 +2,43 @@ package dev.angerm
 
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
+import com.google.inject.Inject
+import com.google.inject.Provides
+import com.google.inject.multibindings.ProvidesIntoSet
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
-import dev.angerm.modules.DatabaseClientModule
+import com.uchuhimo.konf.Config
+import com.uchuhimo.konf.ConfigSpec
+import com.uchuhimo.konf.source.yaml
+import dev.angerm.storage.DatabaseClientModule
 
-class App: AbstractModule() {
+class App : AbstractModule() {
     private val sb = Server.builder()
+    private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
+
     override fun configure() {
-       bind(ServerBuilder::class.java).toInstance(sb)
+        bind(ServerBuilder::class.java).toInstance(sb)
+    }
+
+    @ProvidesIntoSet
+    fun getSpec(): ConfigSpec {
+        return BaseSpec
+    }
+
+    @Provides
+    @Inject
+    fun getConfig(
+        specs: Set<ConfigSpec>
+    ): Config {
+        return Config {
+            specs.forEach {
+                this.addSpec(it)
+            }
+        }
+            .from.yaml.file("base.yml", true)
+            .from.yaml.file("$environment.yml", true)
+            .from.systemProperties()
+            .from.env()
     }
 }
 
