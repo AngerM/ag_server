@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
+import dev.angerm.modules.DatabaseClientModule
 
 class App: AbstractModule() {
     private val sb = Server.builder()
@@ -14,7 +15,8 @@ class App: AbstractModule() {
 
 fun main() {
     val injector = Guice.createInjector(
-        App()
+        App(),
+        DatabaseClientModule(),
     )
     val sb = injector.getInstance(ServerBuilder::class.java)
     val server = sb.build()
