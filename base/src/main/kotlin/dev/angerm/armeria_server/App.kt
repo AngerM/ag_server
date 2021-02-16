@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Inject
 import com.google.inject.Provides
-import com.google.inject.multibindings.OptionalBinder
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.linecorp.armeria.common.SessionProtocol
 import com.linecorp.armeria.server.Server
@@ -15,7 +14,6 @@ import com.uchuhimo.konf.source.yaml
 import dev.angerm.armeria_server.http_handler.HttpHandler
 import dev.angerm.armeria_server.http_handler.PrometheusHandler
 import dev.angerm.armeria_server.storage.DatabaseClientModule
-import javax.annotation.Nullable
 
 class App : AbstractModule() {
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
