@@ -6,6 +6,7 @@ import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.multibindings.OptionalBinder
 import com.google.inject.multibindings.ProvidesIntoSet
+import com.linecorp.armeria.common.SessionProtocol
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
@@ -17,12 +18,7 @@ import dev.angerm.armeria_server.storage.DatabaseClientModule
 import javax.annotation.Nullable
 
 class App : AbstractModule() {
-    private val sb = Server.builder()
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
-
-    override fun configure() {
-        bind(ServerBuilder::class.java).toInstance(sb)
-    }
 
     @ProvidesIntoSet
     fun getSpec(): ConfigSpec {
@@ -34,8 +30,19 @@ class App : AbstractModule() {
         return PrometheusHandler()
     }
 
+    // Wrapper class for the optional injection in case there are none
     class ArmeriaAddons {
         @Inject(optional = true) val addons = setOf<ArmeriaAddon>()
+    }
+
+    @Provides
+    @Inject
+    fun getBuilder(
+        conf: Config
+    ): ServerBuilder {
+        val sb = Server.builder()
+        sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
+        return sb
     }
 
     @Provides
