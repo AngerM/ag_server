@@ -19,6 +19,9 @@ jobs:
         with:
           java-version: 15
 
+      - name: Check out repository
+        uses: actions/checkout@v2
+
       - name: Gradle Cache
         uses: burrunan/gradle-cache-action@v1
 
