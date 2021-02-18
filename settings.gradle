@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'armeria_server'
-include('base')
+include('base', 'grpc')
