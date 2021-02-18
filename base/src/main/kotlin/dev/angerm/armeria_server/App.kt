@@ -15,7 +15,6 @@ import com.uchuhimo.konf.source.yaml
 import dev.angerm.armeria_server.http_handler.DefaultHandler
 import dev.angerm.armeria_server.http_handler.HttpHandler
 import dev.angerm.armeria_server.http_handler.PrometheusHandler
-import dev.angerm.armeria_server.storage.DatabaseClientModule
 
 class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule() {
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
@@ -87,7 +86,6 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
 fun main() {
     val injector = Guice.createInjector(
         App(),
-        DatabaseClientModule(),
     )
     val server = injector.getInstance(Server::class.java)
     server.start().join()

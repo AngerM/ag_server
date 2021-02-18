@@ -1,0 +1,58 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
+    id "org.jlleitschuh.gradle.ktlint" version "10.0.0"
+}
+
+allprojects {
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+  dependencies {
+      implementation platform('org.jetbrains.kotlin:kotlin-bom')
+      implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+      [ 'kotlinx-coroutines-reactor',
+        'kotlinx-coroutines-reactor',
+      ].each {
+        implementation "org.jetbrains.kotlinx:${it}:1.4.2"
+      }
+
+
+      implementation platform("com.linecorp.armeria:armeria-bom:1.5.0")
+      ['armeria',
+      'armeria-logback',
+      'armeria-retrofit2',
+      'armeria-rxjava3',
+      ].each {
+        implementation "com.linecorp.armeria:${it}"
+      }
+      runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
+      runtimeOnly 'org.slf4j:log4j-over-slf4j:1.7.30'
+      implementation 'com.uchuhimo:konf:1.0.0'
+
+      ['simpleclient',
+      'simpleclient_hotspot',
+      'simpleclient_httpserver',
+      ].each {
+        implementation "io.prometheus:${it}:0.10.0"
+      }
+
+      implementation "com.google.inject:guice:5.0.0-BETA-1"
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += '-parameters'
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+}
