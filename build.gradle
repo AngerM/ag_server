@@ -17,8 +17,9 @@ allprojects {
   dependencies {
       implementation platform('org.jetbrains.kotlin:kotlin-bom')
       implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-      [ 'kotlinx-coroutines-reactor',
+      [ 'kotlinx-coroutines-core',
         'kotlinx-coroutines-reactor',
+        'kotlinx-coroutines-jdk8',
       ].each {
         implementation "org.jetbrains.kotlinx:${it}:1.4.2"
       }
