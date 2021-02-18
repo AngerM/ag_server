@@ -1,0 +1,32 @@
+name: CI
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Java JDK
+        uses: actions/setup-java@1.4.3
+        with:
+          java-version: 15
+      
+      - name: Gradle Cache
+        uses: burrunan/gradle-cache-action@v1
+        
+      - name: Test
+        run: ./gradlew test
+      
+      - name: Build
+        run: ./gradlew build -x test
+      
+        
+          
