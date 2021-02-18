@@ -41,9 +41,6 @@ dependencies {
     }
 
     implementation "com.google.inject:guice:5.0.0-BETA-1"
-    implementation "org.springframework.data:spring-data-r2dbc:1.2.3"
-    implementation "io.r2dbc:r2dbc-postgresql:0.8.6.RELEASE"
-    implementation "io.r2dbc:r2dbc-pool:0.8.5.RELEASE"
 
     // Use the Kotlin test library.
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
