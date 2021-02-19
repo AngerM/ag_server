@@ -41,6 +41,7 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
     ): ServerBuilder {
         val sb = Server.builder()
         sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
+        sb.workerGroup(EventLoopGroups.newEventLoopGroup(config[Base.numWorkerThreads], "worker_", true), true)
         return sb
     }
 
