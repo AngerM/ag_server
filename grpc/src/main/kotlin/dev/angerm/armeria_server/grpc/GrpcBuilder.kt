@@ -16,10 +16,13 @@ class GrpcBuilder : ArmeriaAddon {
     }
     private val builder = GrpcService.builder()
     @Inject(optional = true) private val bindableServices: Set<ServerServiceDefinition> = setOf()
-    @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val defaultInterceptors: Set<ServerInterceptor> = setOf()
+    @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedInterceptors: Set<ServerInterceptor> = setOf()
+    private val defaultInterceptors: MutableSet<ServerInterceptor> = mutableSetOf()
 
     init {
         builder.addService(ProtoReflectionService.newInstance())
+        defaultInterceptors.addAll(injectedInterceptors)
+        // Add our interceptors
     }
 
     private fun build(): GrpcService {
