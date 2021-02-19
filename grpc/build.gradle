@@ -4,8 +4,15 @@ plugins {
 
 dependencies {
     implementation group: 'io.grpc', name: 'protoc-gen-grpc-kotlin', version: '1.0.0', ext: 'pom'
+    implementation group: 'io.grpc', name: 'grpc-bom', version: '1.35.0', ext: 'pom'
+    implementation project(':base')
 
-    // Use the Kotlin test library.
+    ['armeria-grpc',
+    ].each {
+        implementation "com.linecorp.armeria:${it}"
+    }
+
+        // Use the Kotlin test library.
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
 }
