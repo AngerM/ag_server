@@ -45,6 +45,9 @@ allprojects {
       }
 
       implementation "com.google.inject:guice:5.0.0-BETA-1"
+
+      testImplementation 'org.jetbrains.kotlin:kotlin-test'
+      testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
     }
 
     tasks.withType(JavaCompile) {
