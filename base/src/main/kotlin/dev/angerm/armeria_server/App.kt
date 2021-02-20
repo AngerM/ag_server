@@ -16,6 +16,8 @@ import com.uchuhimo.konf.source.yaml
 import dev.angerm.armeria_server.http_handler.DefaultHandler
 import dev.angerm.armeria_server.http_handler.HttpHandler
 import dev.angerm.armeria_server.http_handler.PrometheusHandler
+import io.netty.channel.ChannelOption
+import java.time.Duration
 import java.util.concurrent.Executors
 
 class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule() {
@@ -44,9 +46,14 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
         val sb = Server.builder()
         sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
         sb.workerGroup(EventLoopGroups.newEventLoopGroup(conf[BaseSpec.numWorkerThreads], "worker_", true), true)
-        sb.maxConnectionAgeMillis(conf[BaseSpec.maxConnectionAgeMillis].toLong())
+        sb.maxConnectionAge(Duration.ofSeconds(conf[BaseSpec.maxConnectionAgeSeconds]))
         sb.maxNumConnections(conf[BaseSpec.maxNumConnections])
         sb.blockingTaskExecutor(Executors.newScheduledThreadPool(conf[BaseSpec.blockingTaskThreadPoolSize]), true)
+        sb.requestTimeout(Duration.ofSeconds(conf[BaseSpec.requestTimeoutSeconds]))
+        sb.channelOption(ChannelOption.SO_BACKLOG, conf[BaseSpec.socketBacklog])
+        sb.channelOption(ChannelOption.SO_REUSEADDR, conf[BaseSpec.reuseAddr])
+        sb.childChannelOption(ChannelOption.SO_SNDBUF, conf[BaseSpec.sndBuf])
+        sb.childChannelOption(ChannelOption.SO_RCVBUF, conf[BaseSpec.rcvBuf])
         return sb
     }
 
