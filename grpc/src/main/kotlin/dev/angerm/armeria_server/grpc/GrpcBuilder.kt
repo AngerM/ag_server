@@ -5,9 +5,9 @@ import com.google.inject.name.Named
 import com.linecorp.armeria.server.ServerBuilder
 import com.linecorp.armeria.server.grpc.GrpcService
 import dev.angerm.armeria_server.ArmeriaAddon
-import io.grpc.ServerServiceDefinition
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
+import io.grpc.ServerServiceDefinition
 import io.grpc.protobuf.services.ProtoReflectionService
 
 class GrpcBuilder : ArmeriaAddon {

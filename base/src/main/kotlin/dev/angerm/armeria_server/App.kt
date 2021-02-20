@@ -7,6 +7,7 @@ import com.google.inject.Provides
 import com.google.inject.multibindings.Multibinder
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.linecorp.armeria.common.SessionProtocol
+import com.linecorp.armeria.common.util.EventLoopGroups
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
@@ -15,6 +16,7 @@ import com.uchuhimo.konf.source.yaml
 import dev.angerm.armeria_server.http_handler.DefaultHandler
 import dev.angerm.armeria_server.http_handler.HttpHandler
 import dev.angerm.armeria_server.http_handler.PrometheusHandler
+import java.util.concurrent.Executors
 
 class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule() {
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
@@ -41,7 +43,10 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
     ): ServerBuilder {
         val sb = Server.builder()
         sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
-        sb.workerGroup(EventLoopGroups.newEventLoopGroup(config[BaseSpec.numWorkerThreads], "worker_", true), true)
+        sb.workerGroup(EventLoopGroups.newEventLoopGroup(conf[BaseSpec.numWorkerThreads], "worker_", true), true)
+        sb.maxConnectionAgeMillis(conf[BaseSpec.maxConnectionAgeMillis].toLong())
+        sb.maxNumConnections(conf[BaseSpec.maxNumConnections])
+        sb.blockingTaskExecutor(Executors.newScheduledThreadPool(conf[BaseSpec.blockingTaskThreadPoolSize]), true)
         return sb
     }
 
