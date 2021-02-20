@@ -11,6 +11,6 @@ object BaseSpec : ConfigSpec() {
     val requestTimeoutSeconds by optional(10L)
     val socketBacklog by optional(256)
     val reuseAddr by optional(true)
-    val sndBuf by optional(1024*1024)
-    val rcvBuf by optional(1024*1024)
+    val sndBuf by optional(1024 * 1024)
+    val rcvBuf by optional(1024 * 1024)
 }
