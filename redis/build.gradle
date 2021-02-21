@@ -1,3 +1,4 @@
 dependencies {
+    implementation project(':base')
     implementation group: 'io.lettuce', name: 'lettuce-core', version: '6.0.2.RELEASE'
 }
