@@ -1,4 +1,4 @@
-package dev.angerm.armeria_server
+package dev.angerm.ag_server
 
 import com.uchuhimo.konf.ConfigSpec
 

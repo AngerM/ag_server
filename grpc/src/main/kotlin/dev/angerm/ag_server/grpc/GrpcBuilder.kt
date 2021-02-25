@@ -1,10 +1,10 @@
-package dev.angerm.armeria_server.grpc
+package dev.angerm.ag_server.grpc
 
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import com.linecorp.armeria.server.ServerBuilder
 import com.linecorp.armeria.server.grpc.GrpcService
-import dev.angerm.armeria_server.ArmeriaAddon
+import dev.angerm.ag_server.ArmeriaAddon
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition

@@ -5,6 +5,6 @@ plugins {
 dependencies { }
 
 application {
-    mainClass = 'dev.angerm.armeria_server.AppKt'
+    mainClass = 'dev.angerm.ag_server.AppKt'
 }
 

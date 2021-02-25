@@ -1,4 +1,4 @@
-package dev.angerm.armeria_server.redis
+package dev.angerm.ag_server.redis
 
 import com.google.inject.AbstractModule
 import com.google.inject.Inject
@@ -6,9 +6,9 @@ import com.google.inject.Provides
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
-import io.lettuce.core.cluster.RedisClusterClient
+import io.lettuce.core.RedisClient
 
-class RedisClusterModule : AbstractModule() {
+class RedisModule : AbstractModule() {
     @ProvidesIntoSet
     fun getConfig(): ConfigSpec {
         return RedisSpec
@@ -18,7 +18,7 @@ class RedisClusterModule : AbstractModule() {
     @Inject
     fun getRedisCluster(
         conf: Config
-    ): RedisClusterClient {
-        return RedisClusterClient.create(conf[RedisSpec.uri])
+    ): RedisClient {
+        return RedisClient.create(conf[RedisSpec.uri])
     }
 }

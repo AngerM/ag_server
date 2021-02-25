@@ -1,4 +1,4 @@
-package dev.angerm.armeria_server.grpc
+package dev.angerm.ag_server.grpc
 
 import com.google.inject.AbstractModule
 import com.google.inject.Inject

@@ -1,4 +1,4 @@
-package dev.angerm.armeria_server
+package dev.angerm.ag_server
 
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
@@ -13,9 +13,9 @@ import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import com.uchuhimo.konf.source.yaml
-import dev.angerm.armeria_server.http_handler.DefaultHandler
-import dev.angerm.armeria_server.http_handler.HttpHandler
-import dev.angerm.armeria_server.http_handler.PrometheusHandler
+import dev.angerm.ag_server.http_handler.DefaultHandler
+import dev.angerm.ag_server.http_handler.HttpHandler
+import dev.angerm.ag_server.http_handler.PrometheusHandler
 import io.netty.channel.ChannelOption
 import java.time.Duration
 import java.util.concurrent.Executors
