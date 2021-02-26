@@ -7,6 +7,7 @@ import com.google.inject.multibindings.ProvidesIntoSet
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import io.lettuce.core.RedisClient
+import io.lettuce.core.cluster.RedisClusterClient
 
 class RedisModule : AbstractModule() {
     @ProvidesIntoSet
@@ -16,9 +17,27 @@ class RedisModule : AbstractModule() {
 
     @Provides
     @Inject
+    fun getRedis(
+        conf: Config
+    ): Map<String, RedisClient> {
+        val redisConfigs = conf[RedisSpec.redis]
+        return redisConfigs.filterValues {
+            !it.isCluster
+        }.map {
+            it.key to RedisClient.create(it.value.uri)
+        }.toMap()
+    }
+
+    @Provides
+    @Inject
     fun getRedisCluster(
         conf: Config
-    ): RedisClient {
-        return RedisClient.create(conf[RedisSpec.uri])
+    ): Map<String, RedisClusterClient> {
+        val redisConfigs = conf[RedisSpec.redis]
+        return redisConfigs.filterValues {
+            it.isCluster
+        }.map {
+            it.key to RedisClusterClient.create(it.value.uri)
+        }.toMap()
     }
 }
