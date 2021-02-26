@@ -1,9 +1,6 @@
 package dev.angerm.ag_server
 
-import com.google.inject.AbstractModule
-import com.google.inject.Guice
-import com.google.inject.Inject
-import com.google.inject.Provides
+import com.google.inject.*
 import com.google.inject.multibindings.Multibinder
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.linecorp.armeria.common.SessionProtocol
@@ -40,6 +37,7 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
 
     @Provides
     @Inject
+    @Singleton
     fun getBuilder(
         conf: Config
     ): ServerBuilder {
@@ -59,6 +57,7 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
 
     @Provides
     @Inject
+    @Singleton
     fun getServer(
         builder: ServerBuilder,
         handlers: Set<HttpHandler>,
@@ -75,6 +74,7 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
 
     @Provides
     @Inject
+    @Singleton
     fun getConfig(
         specs: Set<ConfigSpec>
     ): Config {

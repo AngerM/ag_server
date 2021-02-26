@@ -3,6 +3,7 @@ package dev.angerm.ag_server.redis
 import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Provides
+import com.google.inject.Singleton
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
@@ -17,6 +18,7 @@ class RedisModule : AbstractModule() {
 
     @Provides
     @Inject
+    @Singleton
     fun getRedis(
         conf: Config
     ): Map<String, RedisClient> {
@@ -30,6 +32,7 @@ class RedisModule : AbstractModule() {
 
     @Provides
     @Inject
+    @Singleton
     fun getRedisCluster(
         conf: Config
     ): Map<String, RedisClusterClient> {
