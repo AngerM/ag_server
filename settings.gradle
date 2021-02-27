@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'ag_server'
-include('base', 'grpc', 'database', 'redis')
+include('base', 'grpc', 'redis')
