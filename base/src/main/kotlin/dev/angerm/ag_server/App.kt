@@ -9,6 +9,7 @@ import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
+import com.uchuhimo.konf.source.toml
 import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.http_handler.DefaultHandler
 import dev.angerm.ag_server.http_handler.HttpHandler
@@ -85,8 +86,10 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
         }
             .from.yaml.file("base.yml", true)
             .from.json.file("base.json", true)
+            .from.toml.file("base.toml", true)
             .from.yaml.file("$environment.yml", true)
             .from.json.file("$environment.json", true)
+            .from.toml.file("$environment.toml", true)
             .from.systemProperties()
             .from.env()
     }
