@@ -31,6 +31,9 @@ class DatabaseModule : AbstractModule() {
                 this.option(ConnectionFactoryOptions.PASSWORD, System.getenv(dbConf.passwordEnvVar))
                 this.option(Option.valueOf("initialSize"), dbConf.poolInitialSize)
                 this.option(Option.valueOf("maxSize"), dbConf.poolMaxSize)
+                dbConf.otherOptions.forEach { (optionName, value) ->
+                    this.option(Option.valueOf(optionName), value)
+                }
             }.build()
             val cf = ConnectionFactories.get(cfo)
             it.key to DatabaseClient.create(cf)
