@@ -2,7 +2,7 @@ package dev.angerm.ag_server.database
 
 import com.uchuhimo.konf.ConfigSpec
 
-object DatabaseSpec: ConfigSpec("") {
+object DatabaseSpec : ConfigSpec("") {
     data class DatabaseConfig(
         val protocol: String,
         val hostname: String,

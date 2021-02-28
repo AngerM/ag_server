@@ -5,13 +5,12 @@ import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.uchuhimo.konf.Config
-import io.r2dbc.pool.ConnectionPoolConfiguration
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.Option
 import org.springframework.r2dbc.core.DatabaseClient
 
-class DatabaseModule: AbstractModule() {
+class DatabaseModule : AbstractModule() {
     @Provides
     @Inject
     @Singleton
@@ -30,8 +29,8 @@ class DatabaseModule: AbstractModule() {
                 this.option(ConnectionFactoryOptions.SSL, dbConf.ssl)
                 this.option(ConnectionFactoryOptions.USER, dbConf.username)
                 this.option(ConnectionFactoryOptions.PASSWORD, System.getenv(dbConf.passwordEnvVar))
-                this.option(Option.valueOf("initialSize"), dbConf.poolInitialSize )
-                this.option(Option.valueOf("maxSize"), dbConf.poolMaxSize )
+                this.option(Option.valueOf("initialSize"), dbConf.poolInitialSize)
+                this.option(Option.valueOf("maxSize"), dbConf.poolMaxSize)
             }.build()
             val cf = ConnectionFactories.get(cfo)
             it.key to DatabaseClient.create(cf)
