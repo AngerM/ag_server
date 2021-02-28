@@ -18,6 +18,8 @@ class DatabaseModuleTest {
                    hostname: localhost
                    port: 5379
                    database: test
+                   otherOptions:
+                     someSpecificOption: testValue
            """.trimIndent()
         ).from.env()
         val dbConfigs = config[DatabaseSpec.database]
@@ -27,5 +29,9 @@ class DatabaseModuleTest {
         assertEquals("postgres", first.protocol)
         assertEquals(5379, first.port)
         assertEquals("test", first.database)
+        assertEquals(1, first.otherOptions.size)
+        val value = first.otherOptions[first.otherOptions.keys.first()]!!
+        assertEquals("someSpecificOption", first.otherOptions.keys.first())
+        assertEquals("testValue", value)
     }
 }
