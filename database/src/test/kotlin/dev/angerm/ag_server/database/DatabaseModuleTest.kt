@@ -10,7 +10,7 @@ class DatabaseModuleTest {
     fun testConfigParsing() {
         val config = Config {
             this.addSpec(DatabaseSpec)
-        } .from.yaml.string(
+        }.from.yaml.string(
             """
                database:
                  primary:
@@ -20,7 +20,7 @@ class DatabaseModuleTest {
                    database: test
                    otherOptions:
                      someSpecificOption: testValue
-           """.trimIndent()
+            """.trimIndent()
         ).from.env()
         val dbConfigs = config[DatabaseSpec.database]
         assertEquals(1, dbConfigs.size)
