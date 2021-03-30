@@ -25,10 +25,10 @@ class App(
 ) : AbstractModule() {
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
 
-   override fun configure() {
-      bind(CollectorRegistry::class.java).toInstance(registry)
-       Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
-   }
+    override fun configure() {
+        bind(CollectorRegistry::class.java).toInstance(registry)
+        Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
+    }
 
     @ProvidesIntoSet
     fun getSpec(): ConfigSpec {

@@ -10,15 +10,19 @@ import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.Option
 import org.springframework.r2dbc.core.DatabaseClient
 
+data class DbContainer(
+    val clients: Map<String, DatabaseClient>
+)
+
 class DatabaseModule : AbstractModule() {
     @Provides
     @Inject
     @Singleton
     fun getDbs(
         conf: Config,
-    ): Map<String, DatabaseClient> {
+    ): DbContainer {
         val dbConfigs = conf[DatabaseSpec.database]
-        return dbConfigs.map {
+        val clients = dbConfigs.map {
             val dbConf = it.value
             val cfo = ConnectionFactoryOptions.builder().apply {
                 this.option(ConnectionFactoryOptions.DRIVER, "pool")
@@ -38,5 +42,6 @@ class DatabaseModule : AbstractModule() {
             val cf = ConnectionFactories.get(cfo)
             it.key to DatabaseClient.create(cf)
         }.toMap()
+        return DbContainer(clients)
     }
 }
