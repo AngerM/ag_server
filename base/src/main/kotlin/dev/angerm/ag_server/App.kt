@@ -15,6 +15,7 @@ import dev.angerm.ag_server.http_handler.DefaultHandler
 import dev.angerm.ag_server.http_handler.HttpHandler
 import dev.angerm.ag_server.http_handler.PrometheusHandler
 import io.netty.channel.ChannelOption
+import io.prometheus.client.CollectorRegistry
 import java.time.Duration
 import java.util.concurrent.Executors
 
@@ -26,9 +27,15 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
         return BaseSpec
     }
 
+    @Provides
+    @Singleton
+    fun getRegistry(): CollectorRegistry {
+        return CollectorRegistry.defaultRegistry
+    }
+
     @ProvidesIntoSet
-    fun getPromHttp(): HttpHandler {
-        return PrometheusHandler()
+    fun getPromHttp(registry: CollectorRegistry): HttpHandler {
+        return PrometheusHandler(registry)
     }
 
     // Wrapper class for the optional injection in case there are none

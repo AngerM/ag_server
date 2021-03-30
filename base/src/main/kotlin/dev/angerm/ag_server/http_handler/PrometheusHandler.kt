@@ -6,7 +6,7 @@ import io.prometheus.client.exporter.common.TextFormat
 import io.prometheus.client.hotspot.DefaultExports
 import java.io.StringWriter
 
-class PrometheusHandler : HttpHandler {
+class PrometheusHandler(private val registry: CollectorRegistry) : HttpHandler {
     override val pathPrefix: String
         get() = "/"
 
@@ -17,7 +17,7 @@ class PrometheusHandler : HttpHandler {
     @Get("/prometheus")
     fun get(): String {
         val writer = StringWriter()
-        TextFormat.write004(writer, CollectorRegistry.defaultRegistry.metricFamilySamples())
+        TextFormat.write004(writer, registry.metricFamilySamples())
         return writer.toString()
     }
 }
