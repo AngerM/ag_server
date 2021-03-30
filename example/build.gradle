@@ -1,0 +1,13 @@
+plugins {
+    id 'application'
+}
+
+dependencies {
+    implementation project(":base")
+    implementation project(":redis")
+}
+
+application {
+    mainClass = 'dev.angerm.ag_server.example.ExampleKt'
+}
+

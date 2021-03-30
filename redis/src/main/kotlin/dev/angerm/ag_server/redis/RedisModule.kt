@@ -13,6 +13,11 @@ import io.lettuce.core.metrics.CommandLatencyRecorder
 import io.lettuce.core.resource.ClientResources
 import io.prometheus.client.CollectorRegistry
 
+data class RedisContainer(
+    val redisClients: Map<String, RedisClient>,
+    val clusterClients: Map<String, RedisClusterClient>
+)
+
 class RedisModule : AbstractModule() {
     @ProvidesIntoSet
     fun getConfig(): ConfigSpec {
@@ -33,9 +38,9 @@ class RedisModule : AbstractModule() {
     fun getRedis(
         recorder: CommandLatencyRecorder,
         conf: Config
-    ): Map<String, RedisClient> {
+    ): RedisContainer {
         val redisConfigs = conf[RedisSpec.redis]
-        return redisConfigs.filterValues {
+        val redis = redisConfigs.filterValues {
             !it.isCluster
         }.map {
             val resources = ClientResources.builder()
@@ -44,17 +49,8 @@ class RedisModule : AbstractModule() {
                 }.build()
             it.key to RedisClient.create(resources, it.value.uri)
         }.toMap()
-    }
 
-    @Provides
-    @Inject
-    @Singleton
-    fun getRedisCluster(
-        recorder: CommandLatencyRecorder,
-        conf: Config
-    ): Map<String, RedisClusterClient> {
-        val redisConfigs = conf[RedisSpec.redis]
-        return redisConfigs.filterValues {
+        val cluster = redisConfigs.filterValues {
             it.isCluster
         }.map {
             val resources = ClientResources.builder()
@@ -63,5 +59,9 @@ class RedisModule : AbstractModule() {
                 }.build()
             it.key to RedisClusterClient.create(resources, it.value.uri)
         }.toMap()
+        return RedisContainer(
+            redis,
+            cluster
+        )
     }
 }

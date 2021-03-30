@@ -7,14 +7,14 @@ import io.prometheus.client.Histogram
 import java.net.SocketAddress
 
 class PrometheusLettuceRecorder(registry: CollectorRegistry) : CommandLatencyRecorder {
-    private val firstLatency = Histogram.build("lettuce.command.first_response_latency", "latency metrics for lettuce commands in nanoseconds")
+    private val firstLatency = Histogram.build("lettuce_command_first_response_latency", "latency metrics for lettuce commands in nanoseconds")
         .exponentialBuckets(100_000.0, 2.0, 16)
         .labelNames(
             "remote",
             "command",
         ).register(registry)
 
-    private val completionLatency = Histogram.build("lettuce.command.latency", "latency metrics for lettuce commands in nanoseconds")
+    private val completionLatency = Histogram.build("lettuce_command_latency", "latency metrics for lettuce commands in nanoseconds")
         .exponentialBuckets(100_000.0, 2.0, 16)
         .labelNames(
             "remote",

@@ -19,18 +19,20 @@ import io.prometheus.client.CollectorRegistry
 import java.time.Duration
 import java.util.concurrent.Executors
 
-class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule() {
+class App(
+    private val defaultHandler: HttpHandler = DefaultHandler(),
+    private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry
+) : AbstractModule() {
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
+
+   override fun configure() {
+      bind(CollectorRegistry::class.java).toInstance(registry)
+       Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
+   }
 
     @ProvidesIntoSet
     fun getSpec(): ConfigSpec {
         return BaseSpec
-    }
-
-    @Provides
-    @Singleton
-    fun getRegistry(): CollectorRegistry {
-        return CollectorRegistry.defaultRegistry
     }
 
     @ProvidesIntoSet
@@ -91,18 +93,14 @@ class App(val defaultHandler: HttpHandler = DefaultHandler()) : AbstractModule()
                 this.addSpec(it)
             }
         }
-            .from.yaml.file("base.yml", true)
-            .from.json.file("base.json", true)
-            .from.toml.file("base.toml", true)
-            .from.yaml.file("$environment.yml", true)
-            .from.json.file("$environment.json", true)
-            .from.toml.file("$environment.toml", true)
+            .from.yaml.resource("base.yml", true)
+            .from.json.resource("base.json", true)
+            .from.toml.resource("base.toml", true)
+            .from.yaml.resource("$environment.yml", true)
+            .from.json.resource("$environment.json", true)
+            .from.toml.resource("$environment.toml", true)
             .from.systemProperties()
             .from.env()
-    }
-
-    override fun configure() {
-        Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
     }
 }
 
