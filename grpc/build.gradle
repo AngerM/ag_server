@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation group: 'io.grpc', name: 'protoc-gen-grpc-kotlin', version: '1.0.0', ext: 'pom'
-    implementation group: 'io.grpc', name: 'grpc-bom', version: '1.36.0', ext: 'pom'
+    implementation group: 'io.grpc', name: 'grpc-bom', version: '1.36.1', ext: 'pom'
     implementation project(':base')
 
     ['armeria-grpc',
