@@ -6,7 +6,7 @@ WORKDIR /workspace
 
 COPY . /workspace
 
-RUN gradle test example:installDist --no-daemon
+RUN gradle example:installDist --no-daemon
 
 FROM openjdk:11-jdk-slim-buster as runner
 WORKDIR /home
