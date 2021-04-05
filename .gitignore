@@ -9,3 +9,4 @@ build
 .settings
 .classpath
 bin
+dump.rdb

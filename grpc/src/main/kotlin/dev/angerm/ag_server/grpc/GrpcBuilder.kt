@@ -9,6 +9,8 @@ import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition
 import io.grpc.protobuf.services.ProtoReflectionService
+import me.dinowernli.grpc.prometheus.Configuration
+import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
 
 class GrpcBuilder : ArmeriaAddon {
     companion object {
@@ -22,7 +24,7 @@ class GrpcBuilder : ArmeriaAddon {
     init {
         builder.addService(ProtoReflectionService.newInstance())
         defaultInterceptors.addAll(injectedInterceptors)
-        // Add our interceptors
+        defaultInterceptors.add(MonitoringServerInterceptor.create(Configuration.allMetrics()))
     }
 
     private fun build(): GrpcService {
