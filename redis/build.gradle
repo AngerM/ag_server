@@ -1,4 +1,4 @@
 dependencies {
     implementation project(':base')
-    api group: 'io.lettuce', name: 'lettuce-core', version: '6.0.3.RELEASE'
+    api group: 'io.lettuce', name: 'lettuce-core', version: '6.1.0.RELEASE'
 }
