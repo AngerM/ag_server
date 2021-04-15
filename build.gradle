@@ -26,7 +26,7 @@ allprojects {
       }
 
 
-      api platform("com.linecorp.armeria:armeria-bom:1.5.0")
+      api platform("com.linecorp.armeria:armeria-bom:1.6.0")
       ['armeria',
        'armeria-kotlin',
        'armeria-logback',
@@ -37,7 +37,7 @@ allprojects {
       }
       api 'ch.qos.logback:logback-classic:1.2.3'
       api 'org.slf4j:log4j-over-slf4j:1.7.30'
-      api 'com.uchuhimo:konf:1.0.0'
+      api 'com.uchuhimo:konf:1.1.2'
 
       ['simpleclient',
       'simpleclient_hotspot',
