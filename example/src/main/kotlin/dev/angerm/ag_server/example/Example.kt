@@ -3,10 +3,12 @@ package dev.angerm.ag_server.example
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.multibindings.ProvidesIntoSet
+import com.linecorp.armeria.common.HttpRequest
 import com.linecorp.armeria.common.logging.RequestLog
 import com.linecorp.armeria.server.ServiceRequestContext
 import com.linecorp.armeria.server.annotation.Get
 import com.linecorp.armeria.server.annotation.Param
+import com.linecorp.armeria.server.annotation.Post
 import dev.angerm.ag_server.AgModule
 import dev.angerm.ag_server.grpc.GrpcModule
 import dev.angerm.ag_server.http.HttpDecorator
@@ -26,6 +28,11 @@ class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
     @Get("/:key")
     suspend fun get(@Param("key") key: String): String {
         return connection?.get(key)?.await() ?: "no key"
+    }
+
+    @Post("/:key")
+    suspend fun post(@Param("key") key: String, body: String): String {
+        return connection?.set(key, body)?.await() ?: "failure"
     }
 }
 
