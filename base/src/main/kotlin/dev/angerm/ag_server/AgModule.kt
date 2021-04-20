@@ -20,11 +20,19 @@ import io.prometheus.client.CollectorRegistry
 import java.time.Duration
 import java.util.concurrent.Executors
 
+/**
+ * The base module for the Ag Wrapper, provides functionality for serving HTTP requests
+ */
 class AgModule(
     private val defaultHandler: HttpHandler = DefaultHandler(),
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry
 ) : AbstractModule() {
     companion object {
+        /**
+         * Convenience method to get an App instance from the injector
+         * @param injector a Guice injector that has had AgModule added to it
+         * @return an App instance to start the server from
+         */
         fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
     }
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
@@ -34,21 +42,50 @@ class AgModule(
         Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
     }
 
+    /**
+     * This is an example of how to inject other ConfigSpec's into the Konf parser.
+     * Add your own via a similar
+     * <pre>{@code
+     * @ProvidesIntoSet
+     * fun getMySpec(): ConfigSpec {
+     *   return MySpec
+     * }
+     * }</pre>
+     * @return a config spec for Konf to parse
+     */
     @ProvidesIntoSet
     fun getSpec(): ConfigSpec {
         return BaseSpec
     }
 
+    /**
+     * This is an example of how to inject other HttpHandlers into this server
+     * Add your own via a similar
+     * <pre>{@code
+     * @ProvidesIntoSet
+     * fun getMyHandler(): HttpHandler {
+     *   return MyHandler()
+     * }
+     * }</pre>
+     * @return a HttpHandler to add to the server
+     */
     @ProvidesIntoSet
     fun getPromHttp(registry: CollectorRegistry): HttpHandler {
         return PrometheusHandler(registry)
     }
 
-    // Wrapper class for the optional injection in case there are none
+    /**
+     * This is a simple wrapper class to work around some Guice stuff
+     * You shouldn't have to deal with it
+     */
     class ArmeriaAddons {
         @Inject(optional = true) val addons = setOf<ArmeriaAddon>()
     }
 
+    /**
+     * This is a simple wrapper class to work around some Guice stuff
+     * You shouldn't have to deal with it
+     */
     class HttpDecorators {
         @Inject(optional = true) val decorators = setOf<List<HttpDecorator>>()
     }
