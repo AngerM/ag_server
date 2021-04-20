@@ -159,7 +159,7 @@ class AgModule(
     @Inject
     fun getDefaultDecorators(
         metrics: Metrics
-    ):List<HttpDecorator> {
+    ): List<HttpDecorator> {
         return listOf<HttpDecorator>(
             SimpleHttpDecorator.Wrapper { _, ctx, _ ->
                 HttpMetricDecorator(ctx, metrics)

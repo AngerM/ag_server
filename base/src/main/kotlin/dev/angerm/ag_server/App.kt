@@ -5,8 +5,6 @@ import com.google.inject.Inject
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import dev.angerm.ag_server.http.HttpHandler
-import dev.angerm.ag_server.http.HttpMetricDecorator
-import dev.angerm.ag_server.http.SimpleHttpDecorator
 import java.util.concurrent.CompletableFuture
 
 interface App {
