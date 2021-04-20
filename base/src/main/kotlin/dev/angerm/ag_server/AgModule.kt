@@ -76,7 +76,7 @@ class AgModule(
     @Provides
     @Inject
     @Singleton
-    fun getServer(app: AppImpl):App = app
+    fun getServer(app: AppImpl): App = app
 
     @Provides
     @Inject

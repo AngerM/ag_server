@@ -29,7 +29,7 @@ class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
     }
 }
 
-class LoggingDecorator(ctx: ServiceRequestContext): SimpleDecorator() {
+class LoggingDecorator(ctx: ServiceRequestContext) : SimpleDecorator() {
     private val logger = Logger.getLogger(this::class.java.canonicalName)
     private val pathPattern = ctx.config().route().patternString()
     override fun start() {
@@ -39,7 +39,6 @@ class LoggingDecorator(ctx: ServiceRequestContext): SimpleDecorator() {
     override fun end(log: RequestLog) {
         logger.info("Request ended for $pathPattern with ${log.responseHeaders().status().codeAsText()}")
     }
-
 }
 
 class ExampleModule : AbstractModule() {
@@ -53,8 +52,9 @@ class ExampleModule : AbstractModule() {
     @ProvidesIntoSet
     fun addLoggingMiddleWare(): List<HttpDecorator> {
         return listOf<HttpDecorator>(
-            SimpleDecorator.Wrapper{
-                _, ctx, _ -> LoggingDecorator(ctx)
+            SimpleDecorator.Wrapper {
+                _, ctx, _ ->
+                LoggingDecorator(ctx)
             }
         )
     }

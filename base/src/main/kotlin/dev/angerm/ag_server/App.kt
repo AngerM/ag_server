@@ -18,12 +18,12 @@ class AppImpl @Inject constructor(
     handlers: Set<HttpHandler>,
     decorators: AgModule.HttpDecorators,
     private val addons: AgModule.ArmeriaAddons
-): App {
+) : App {
     private val server: Server
     init {
         decorators.decorators.forEach {
             orderedDecoratorList ->
-            orderedDecoratorList.forEach{
+            orderedDecoratorList.forEach {
                 builder.decorator(it.forRoute(), it)
             }
         }
