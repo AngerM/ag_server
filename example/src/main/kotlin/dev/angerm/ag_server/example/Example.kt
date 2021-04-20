@@ -11,7 +11,7 @@ import dev.angerm.ag_server.AgModule
 import dev.angerm.ag_server.grpc.GrpcModule
 import dev.angerm.ag_server.http.HttpDecorator
 import dev.angerm.ag_server.http.HttpHandler
-import dev.angerm.ag_server.http.SimpleDecorator
+import dev.angerm.ag_server.http.SimpleHttpDecorator
 import dev.angerm.ag_server.redis.RedisContainer
 import dev.angerm.ag_server.redis.RedisModule
 import io.lettuce.core.RedisClient
@@ -29,7 +29,7 @@ class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
     }
 }
 
-class LoggingDecorator(ctx: ServiceRequestContext) : SimpleDecorator() {
+class LoggingDecorator(ctx: ServiceRequestContext) : SimpleHttpDecorator() {
     private val logger = Logger.getLogger(this::class.java.canonicalName)
     private val pathPattern = ctx.config().route().patternString()
     override fun start() {
@@ -52,7 +52,7 @@ class ExampleModule : AbstractModule() {
     @ProvidesIntoSet
     fun addLoggingMiddleWare(): List<HttpDecorator> {
         return listOf<HttpDecorator>(
-            SimpleDecorator.Wrapper {
+            SimpleHttpDecorator.Wrapper {
                 _, ctx, _ ->
                 LoggingDecorator(ctx)
             }
