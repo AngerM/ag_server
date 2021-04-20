@@ -11,6 +11,7 @@ interface App {
     fun start(): CompletableFuture<*>
     fun stop(): CompletableFuture<*>
     fun runBlocking()
+    fun port(): Int
 }
 
 class AppImpl @Inject constructor(
@@ -55,6 +56,9 @@ class AppImpl @Inject constructor(
     override fun runBlocking() {
         start().join()
     }
+
+    override fun port(): Int =
+       server.config().ports().first()?.localAddress()?.port ?: 0
 }
 
 fun main() {

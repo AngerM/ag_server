@@ -14,7 +14,7 @@ class PrometheusHandler(private val registry: CollectorRegistry) : HttpHandler {
         DefaultExports.initialize()
     }
 
-    @Get("/prometheus")
+    @Get("/metrics")
     fun get(): String {
         val writer = StringWriter()
         TextFormat.write004(writer, registry.metricFamilySamples())
