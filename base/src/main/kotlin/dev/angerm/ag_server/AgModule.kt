@@ -19,15 +19,22 @@ import dev.angerm.ag_server.http.PrometheusHandler
 import dev.angerm.ag_server.http.SimpleHttpDecorator
 import io.netty.channel.ChannelOption
 import io.prometheus.client.CollectorRegistry
+import io.prometheus.client.hotspot.DefaultExports
+import java.net.ServerSocket
 import java.time.Duration
 import java.util.concurrent.Executors
 
 /**
  * The base module for the Ag Wrapper, provides functionality for serving HTTP requests
+ *
+ * @param defaultHandler the default handler
+ * @param registry the collector registry, defaults to the prometheus defaultRegistry
+ * @param autoPort tells AgModule to ignore the config and bind to any available port
  */
 class AgModule(
     private val defaultHandler: HttpHandler = DefaultHandler(),
-    private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry
+    private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
+    private val autoPort: Boolean = false,
 ) : AbstractModule() {
     companion object {
         /**
@@ -40,6 +47,7 @@ class AgModule(
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
 
     override fun configure() {
+        DefaultExports.register(registry)
         bind(CollectorRegistry::class.java).toInstance(registry)
         Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
     }
@@ -99,7 +107,14 @@ class AgModule(
         conf: Config
     ): ServerBuilder {
         val sb = Server.builder()
-        sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
+        if (!autoPort) {
+            sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
+        } else {
+            val port = ServerSocket(0)
+            val localPort = port.localPort
+            port.close()
+            sb.port(localPort, SessionProtocol.HTTP)
+        }
         sb.workerGroup(EventLoopGroups.newEventLoopGroup(conf[BaseSpec.numWorkerThreads], "worker_", true), true)
         sb.maxConnectionAge(Duration.ofSeconds(conf[BaseSpec.maxConnectionAgeSeconds]))
         sb.maxNumConnections(conf[BaseSpec.maxNumConnections])
