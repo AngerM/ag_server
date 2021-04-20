@@ -4,7 +4,7 @@ import com.linecorp.armeria.server.ServerBuilder
 import java.util.concurrent.CompletableFuture
 
 interface ArmeriaAddon {
-    fun apply(builder: ServerBuilder)
-    fun start()
-    fun stop(): CompletableFuture<*>
+    fun apply(builder: ServerBuilder) {}
+    fun start() {}
+    fun stop(): CompletableFuture<*> = CompletableFuture.completedFuture(true)
 }
