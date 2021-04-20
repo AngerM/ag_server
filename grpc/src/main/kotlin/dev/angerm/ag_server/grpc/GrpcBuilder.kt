@@ -5,14 +5,16 @@ import com.google.inject.name.Named
 import com.linecorp.armeria.server.ServerBuilder
 import com.linecorp.armeria.server.grpc.GrpcService
 import dev.angerm.ag_server.ArmeriaAddon
+import dev.angerm.ag_server.grpc.services.HealthService
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition
 import io.grpc.protobuf.services.ProtoReflectionService
 import me.dinowernli.grpc.prometheus.Configuration
 import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
+import java.util.concurrent.CompletableFuture
 
-class GrpcBuilder : ArmeriaAddon {
+class GrpcBuilder @Inject constructor(private val healthService: HealthService) : ArmeriaAddon {
     companion object {
         const val GLOBAL_INTERCEPTORS = "Global"
     }
@@ -23,6 +25,7 @@ class GrpcBuilder : ArmeriaAddon {
 
     init {
         builder.addService(ProtoReflectionService.newInstance())
+        builder.addService(healthService.bindService())
         defaultInterceptors.addAll(injectedInterceptors)
         defaultInterceptors.add(MonitoringServerInterceptor.create(Configuration.allMetrics()))
     }
@@ -38,5 +41,14 @@ class GrpcBuilder : ArmeriaAddon {
 
     override fun apply(builder: ServerBuilder) {
         builder.service(build())
+    }
+
+    override fun start() {
+        healthService.isServing = true
+    }
+
+    override fun stop(): CompletableFuture<*> {
+        healthService.isServing = false
+        return CompletableFuture.completedFuture(true)
     }
 }

@@ -3,7 +3,7 @@ package dev.angerm.ag_server
 import com.uchuhimo.konf.ConfigSpec
 
 object BaseSpec : ConfigSpec() {
-    val port by optional(8080)
+    val port by optional(50000)
     val numWorkerThreads by optional(64)
     val maxConnectionAgeSeconds by optional(300L)
     val maxNumConnections by optional(500)

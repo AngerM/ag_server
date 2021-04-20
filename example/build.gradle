@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation project(":base")
     implementation project(":redis")
+    implementation project(":grpc")
 }
 
 application {

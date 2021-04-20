@@ -3,10 +3,10 @@ package dev.angerm.ag_server.example
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.multibindings.ProvidesIntoSet
-import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.annotation.Get
 import com.linecorp.armeria.server.annotation.Param
-import dev.angerm.ag_server.App
+import dev.angerm.ag_server.AgModule
+import dev.angerm.ag_server.grpc.GrpcModule
 import dev.angerm.ag_server.http_handler.HttpHandler
 import dev.angerm.ag_server.redis.RedisContainer
 import dev.angerm.ag_server.redis.RedisModule
@@ -35,10 +35,11 @@ class ExampleModule : AbstractModule() {
 
 fun main() {
     val injector = Guice.createInjector(
-        App(),
+        AgModule(),
+        GrpcModule(),
         RedisModule(),
         ExampleModule(),
     )
-    val server = injector.getInstance(Server::class.java)
-    server.start().join()
+    val server = AgModule.getServer(injector)
+    server.runBlocking()
 }
