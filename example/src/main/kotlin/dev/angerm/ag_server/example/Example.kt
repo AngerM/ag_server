@@ -3,7 +3,6 @@ package dev.angerm.ag_server.example
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.multibindings.ProvidesIntoSet
-import com.linecorp.armeria.common.HttpRequest
 import com.linecorp.armeria.common.logging.RequestLog
 import com.linecorp.armeria.server.ServiceRequestContext
 import com.linecorp.armeria.server.annotation.Get

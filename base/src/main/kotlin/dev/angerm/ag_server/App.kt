@@ -58,7 +58,7 @@ class AppImpl @Inject constructor(
     }
 
     override fun port(): Int =
-       server.config().ports().first()?.localAddress()?.port ?: 0
+        server.config().ports().first()?.localAddress()?.port ?: 0
 }
 
 fun main() {
