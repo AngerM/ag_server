@@ -4,7 +4,7 @@ import com.google.inject.Guice
 import com.google.inject.Inject
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
-import dev.angerm.ag_server.http_handler.HttpHandler
+import dev.angerm.ag_server.http.HttpHandler
 import java.util.concurrent.CompletableFuture
 
 interface App {
@@ -16,10 +16,17 @@ interface App {
 class AppImpl @Inject constructor(
     builder: ServerBuilder,
     handlers: Set<HttpHandler>,
+    decorators: AgModule.HttpDecorators,
     private val addons: AgModule.ArmeriaAddons
 ): App {
     private val server: Server
     init {
+        decorators.decorators.forEach {
+            orderedDecoratorList ->
+            orderedDecoratorList.forEach{
+                builder.decorator(it.forRoute(), it)
+            }
+        }
         handlers.forEach {
             builder.annotatedService(it.pathPrefix, it)
         }

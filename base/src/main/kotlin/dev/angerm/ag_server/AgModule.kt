@@ -11,9 +11,10 @@ import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import com.uchuhimo.konf.source.toml
 import com.uchuhimo.konf.source.yaml
-import dev.angerm.ag_server.http_handler.DefaultHandler
-import dev.angerm.ag_server.http_handler.HttpHandler
-import dev.angerm.ag_server.http_handler.PrometheusHandler
+import dev.angerm.ag_server.http.DefaultHandler
+import dev.angerm.ag_server.http.HttpDecorator
+import dev.angerm.ag_server.http.HttpHandler
+import dev.angerm.ag_server.http.PrometheusHandler
 import io.netty.channel.ChannelOption
 import io.prometheus.client.CollectorRegistry
 import java.time.Duration
@@ -46,6 +47,10 @@ class AgModule(
     // Wrapper class for the optional injection in case there are none
     class ArmeriaAddons {
         @Inject(optional = true) val addons = setOf<ArmeriaAddon>()
+    }
+
+    class HttpDecorators {
+        @Inject(optional = true) val decorators = setOf<List<HttpDecorator>>()
     }
 
     @Provides

@@ -1,4 +1,4 @@
-package dev.angerm.ag_server.http_handler
+package dev.angerm.ag_server.http
 
 import com.linecorp.armeria.server.annotation.Get
 import io.prometheus.client.CollectorRegistry
