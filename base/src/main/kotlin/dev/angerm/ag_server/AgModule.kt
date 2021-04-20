@@ -47,7 +47,9 @@ class AgModule(
     private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
 
     override fun configure() {
-        DefaultExports.register(registry)
+        if (registry != CollectorRegistry.defaultRegistry) {
+            DefaultExports.register(registry)
+        }
         bind(CollectorRegistry::class.java).toInstance(registry)
         Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
     }
