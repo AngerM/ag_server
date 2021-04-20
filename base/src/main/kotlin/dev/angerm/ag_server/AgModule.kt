@@ -157,6 +157,7 @@ class AgModule(
 
     @ProvidesIntoSet
     @Inject
+    @Singleton
     fun getDefaultDecorators(
         metrics: Metrics
     ): List<HttpDecorator> {
