@@ -10,7 +10,9 @@ repositories {
 
 dependencies {
     api group: 'io.grpc', name: 'grpc-kotlin-stub', version: '1.0.0', ext: 'pom'
-    api group: 'io.grpc', name: 'grpc-bom', version: '1.37.0', ext: 'pom'
+    api group: 'io.grpc', name: 'grpc-bom', version: "$grpcVersion", ext: 'pom'
+    api group: 'io.grpc', name: 'grpc-services', version: "$grpcVersion"
+    api group: 'io.grpc', name: 'grpc-core', version: "$grpcVersion"
     implementation project(':base')
 
     ['armeria-grpc',
