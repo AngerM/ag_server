@@ -6,6 +6,7 @@ import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.http.HttpHandler
+import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
@@ -37,7 +38,7 @@ class AppImpl @Inject constructor(
 ) : App {
     private val shutdownTimeoutSecods: Long = config[BaseSpec.shutdownTimeoutSeconds]
     private val server: Server
-    private val logger = Logger.getLogger(this::class.java.canonicalName)
+    private val logger = KotlinLogging.logger {}
     init {
         logger.info("App creation started")
         decorators.decorators.forEach {

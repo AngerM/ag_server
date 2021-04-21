@@ -17,6 +17,7 @@ import dev.angerm.ag_server.redis.RedisContainer
 import dev.angerm.ag_server.redis.RedisModule
 import io.lettuce.core.RedisClient
 import kotlinx.coroutines.future.await
+import mu.KotlinLogging
 import java.util.logging.Logger
 
 class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
@@ -36,7 +37,7 @@ class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
 }
 
 class LoggingDecorator(ctx: ServiceRequestContext) : SimpleHttpDecorator() {
-    private val logger = Logger.getLogger(this::class.java.canonicalName)
+    private val logger = KotlinLogging.logger {}
     private val pathPattern = ctx.config().route().patternString()
     override fun start() {
         logger.info("Request started for $pathPattern")

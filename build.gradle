@@ -24,6 +24,7 @@ allprojects {
       [ 'kotlinx-coroutines-core',
         'kotlinx-coroutines-reactor',
         'kotlinx-coroutines-jdk8',
+        'kotlinx-coroutines-slf4j',
       ].each {
         api "org.jetbrains.kotlinx:${it}:1.4.3"
       }
@@ -38,8 +39,7 @@ allprojects {
       ].each {
         api "com.linecorp.armeria:${it}"
       }
-      api 'ch.qos.logback:logback-classic:1.2.3'
-      api 'org.slf4j:log4j-over-slf4j:1.7.30'
+      api 'io.github.microutils:kotlin-logging-jvm:2.0.6'
       api 'com.uchuhimo:konf:1.1.2'
 
       ['simpleclient',
