@@ -9,7 +9,6 @@ import dev.angerm.ag_server.http.HttpHandler
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
-import java.util.logging.Logger
 
 /**
  * The App interface is mainly here to allow Guice proxying during instantiation
@@ -36,7 +35,7 @@ class AppImpl @Inject constructor(
     decorators: AgModule.HttpDecorators,
     private val addons: AgModule.ArmeriaAddons
 ) : App {
-    private val shutdownTimeoutSecods: Long = config[BaseSpec.shutdownTimeoutSeconds]
+    private val shutdownTimeoutSeconds: Long = config[BaseSpec.shutdownTimeoutSeconds]
     private val server: Server
     private val logger = KotlinLogging.logger {}
     init {
@@ -86,7 +85,7 @@ class AppImpl @Inject constructor(
         return CompletableFuture.allOf(
             *futures.toTypedArray(),
             server.stop()
-        ).orTimeout(shutdownTimeoutSecods, TimeUnit.SECONDS)
+        ).orTimeout(shutdownTimeoutSeconds, TimeUnit.SECONDS)
     }
 
     override fun runBlocking() {

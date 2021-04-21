@@ -18,7 +18,6 @@ import dev.angerm.ag_server.redis.RedisModule
 import io.lettuce.core.RedisClient
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
-import java.util.logging.Logger
 
 class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
     override val pathPrefix: String
