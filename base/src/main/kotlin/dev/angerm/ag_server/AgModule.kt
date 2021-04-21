@@ -126,6 +126,10 @@ class AgModule(
         sb.channelOption(ChannelOption.SO_REUSEADDR, conf[BaseSpec.reuseAddr])
         sb.childChannelOption(ChannelOption.SO_SNDBUF, conf[BaseSpec.sndBuf])
         sb.childChannelOption(ChannelOption.SO_RCVBUF, conf[BaseSpec.rcvBuf])
+        sb.gracefulShutdownTimeout(
+            Duration.ofSeconds(conf[BaseSpec.gracefulShutdownTimeSeconds]),
+            Duration.ofSeconds(conf[BaseSpec.shutdownTimeoutSeconds]),
+        )
         return sb
     }
 

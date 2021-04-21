@@ -13,4 +13,6 @@ object BaseSpec : ConfigSpec() {
     val reuseAddr by optional(true)
     val sndBuf by optional(1024 * 1024)
     val rcvBuf by optional(1024 * 1024)
+    val gracefulShutdownTimeSeconds by optional(15L)
+    val shutdownTimeoutSeconds by optional(20L)
 }
