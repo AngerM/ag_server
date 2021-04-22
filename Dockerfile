@@ -1,12 +1,16 @@
-FROM gradle:jdk11 as builder
+FROM openjdk:11-jdk-slim-buster as builder
 
 RUN mkdir /workspace
 
 WORKDIR /workspace
 
+COPY build.gradle settings.gradle gradlew ./
+COPY gradle ./gradle
+RUN ./gradlew build || return 0
+
 COPY . /workspace
 
-RUN gradle example:installDist --no-daemon
+RUN ./gradlew example:installDist --no-daemon
 
 FROM openjdk:11-jdk-slim-buster as runner
 WORKDIR /home
