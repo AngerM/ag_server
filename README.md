@@ -1,4 +1,4 @@
-# Armeria+Guice Server
+# Armeria+Guice Server ![Tests](https://github.com/AngerM/ag_server/actions/workflows/cd.yml/badge.svg)
 
 ### WARNING: Under heavy active development right now. Interfaces/Class names are *not* stable
 
