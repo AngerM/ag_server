@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim-buster as builder
+FROM adoptopenjdk:11-jdk as builder
 
 RUN mkdir /workspace
 
@@ -12,10 +12,11 @@ COPY . /workspace
 
 RUN ./gradlew example:installDist --no-daemon
 
-FROM openjdk:11-jdk-slim-buster as runner
+FROM adoptopenjdk:16-jre-hotspot as runner
 WORKDIR /home
 COPY --from=builder /workspace/example/build/install .
 
+ENV JAVA_OPTS=-XX:+UseZGC
 ENTRYPOINT ["/home/example/bin/example"]
 
 EXPOSE 8080
