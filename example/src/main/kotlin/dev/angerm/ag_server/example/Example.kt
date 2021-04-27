@@ -16,7 +16,6 @@ import dev.angerm.ag_server.http.SimpleHttpDecorator
 import dev.angerm.ag_server.redis.RedisContainer
 import dev.angerm.ag_server.redis.RedisModule
 import dev.angerm.ag_server.redis.SimpleRedis
-import io.lettuce.core.RedisClient
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 

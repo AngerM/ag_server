@@ -86,14 +86,14 @@ class RedisModule : AbstractModule() {
                 }.build()
             if (it.value.isCluster) {
                 val options = getClusterOptions()
-                val client =  RedisClusterClient.create(resources, it.value.uri)
+                val client = RedisClusterClient.create(resources, it.value.uri)
                 client.setOptions(options)
-                it.key to client.connect().apply{
+                it.key to client.connect().apply {
                     this.readFrom = ReadFrom.REPLICA_PREFERRED
                 }.async()
             } else {
                 val options = getClientOptions()
-                val client =  RedisClient.create(resources, it.value.uri)
+                val client = RedisClient.create(resources, it.value.uri)
                 client.options = options
                 it.key to client.connect().async()
             }
