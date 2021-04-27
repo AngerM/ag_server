@@ -51,6 +51,8 @@ class RedisModule : AbstractModule() {
         return ClientOptions.builder()
             .timeoutOptions(timeoutOptions)
             .socketOptions(socketOptions)
+            .cancelCommandsOnReconnectFailure(true)
+            .autoReconnect(true)
             .build()
     }
 
@@ -66,8 +68,6 @@ class RedisModule : AbstractModule() {
 
         return ClusterClientOptions.builder(clientOptions)
             .topologyRefreshOptions(clusterTopologyRefreshOptions)
-            .cancelCommandsOnReconnectFailure(true)
-            .autoReconnect(true)
             .build()
     }
 
