@@ -25,7 +25,7 @@ class RedisHandler(private val connection: SimpleRedis) : HttpHandler {
 
     @Get("/:key")
     suspend fun get(@Param("key") key: String): String {
-        return connection.get(key).await()
+        return connection.get(key).await() ?: "Does not exist"
     }
 
     @Post("/:key")
