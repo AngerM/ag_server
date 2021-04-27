@@ -38,14 +38,14 @@ class RedisModule : AbstractModule() {
         return PrometheusLettuceRecorder(collectorRegistry)
     }
 
-    private fun getClientOptions(): ClientOptions {
+    private fun getClientOptions(conf: RedisSpec.RedisConfig): ClientOptions {
         val socketOptions = SocketOptions.builder()
-            .connectTimeout(Duration.ofSeconds(5))
+            .connectTimeout(Duration.ofMillis(conf.connectTimeoutMillis))
             .keepAlive(true)
             .build()
         val timeoutOptions = TimeoutOptions.builder()
             .timeoutCommands(true)
-            .fixedTimeout(Duration.ofMillis(500))
+            .fixedTimeout(Duration.ofMillis(conf.fixedTimeoutMillis))
             .build()
 
         return ClientOptions.builder()
@@ -56,15 +56,15 @@ class RedisModule : AbstractModule() {
             .build()
     }
 
-    private fun getClusterOptions(): ClusterClientOptions {
+    private fun getClusterOptions(conf: RedisSpec.RedisConfig): ClusterClientOptions {
         val clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
             .enableAllAdaptiveRefreshTriggers()
             .refreshTriggersReconnectAttempts(3)
-            .enablePeriodicRefresh(Duration.ofSeconds(15))
+            .enablePeriodicRefresh(Duration.ofMillis(conf.periodicRefreshTimerMillis))
             .closeStaleConnections(true)
             .dynamicRefreshSources(true)
             .build()
-        val clientOptions = getClientOptions()
+        val clientOptions = getClientOptions(conf)
 
         return ClusterClientOptions.builder(clientOptions)
             .topologyRefreshOptions(clusterTopologyRefreshOptions)
@@ -85,14 +85,14 @@ class RedisModule : AbstractModule() {
                     this.commandLatencyRecorder(recorder)
                 }.build()
             if (it.value.isCluster) {
-                val options = getClusterOptions()
+                val options = getClusterOptions(it.value)
                 val client = RedisClusterClient.create(resources, it.value.uri)
                 client.setOptions(options)
                 it.key to client.connect().apply {
                     this.readFrom = ReadFrom.REPLICA_PREFERRED
                 }.async()
             } else {
-                val options = getClientOptions()
+                val options = getClientOptions(it.value)
                 val client = RedisClient.create(resources, it.value.uri)
                 client.options = options
                 it.key to client.connect().async()
