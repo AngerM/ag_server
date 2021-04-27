@@ -7,15 +7,21 @@ import com.google.inject.Singleton
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
+import io.lettuce.core.ClientOptions
+import io.lettuce.core.ReadFrom
 import io.lettuce.core.RedisClient
+import io.lettuce.core.SocketOptions
+import io.lettuce.core.TimeoutOptions
+import io.lettuce.core.cluster.ClusterClientOptions
+import io.lettuce.core.cluster.ClusterTopologyRefreshOptions
 import io.lettuce.core.cluster.RedisClusterClient
 import io.lettuce.core.metrics.CommandLatencyRecorder
 import io.lettuce.core.resource.ClientResources
 import io.prometheus.client.CollectorRegistry
+import java.time.Duration
 
 data class RedisContainer(
-    val redisClients: Map<String, RedisClient>,
-    val clusterClients: Map<String, RedisClusterClient>
+    val redisClients: Map<String, SimpleRedis>,
 )
 
 class RedisModule : AbstractModule() {
@@ -32,6 +38,39 @@ class RedisModule : AbstractModule() {
         return PrometheusLettuceRecorder(collectorRegistry)
     }
 
+    private fun getClientOptions(): ClientOptions {
+        val socketOptions = SocketOptions.builder()
+            .connectTimeout(Duration.ofSeconds(5))
+            .keepAlive(true)
+            .build()
+        val timeoutOptions = TimeoutOptions.builder()
+            .timeoutCommands(true)
+            .fixedTimeout(Duration.ofMillis(500))
+            .build()
+
+        return ClientOptions.builder()
+            .timeoutOptions(timeoutOptions)
+            .socketOptions(socketOptions)
+            .build()
+    }
+
+    private fun getClusterOptions(): ClusterClientOptions {
+        val clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
+            .enableAllAdaptiveRefreshTriggers()
+            .refreshTriggersReconnectAttempts(3)
+            .enablePeriodicRefresh(Duration.ofSeconds(15))
+            .closeStaleConnections(true)
+            .dynamicRefreshSources(true)
+            .build()
+        val clientOptions = getClientOptions()
+
+        return ClusterClientOptions.builder(clientOptions)
+            .topologyRefreshOptions(clusterTopologyRefreshOptions)
+            .cancelCommandsOnReconnectFailure(true)
+            .autoReconnect(true)
+            .build()
+    }
+
     @Provides
     @Inject
     @Singleton
@@ -40,28 +79,27 @@ class RedisModule : AbstractModule() {
         conf: Config
     ): RedisContainer {
         val redisConfigs = conf[RedisSpec.redis]
-        val redis = redisConfigs.filterValues {
-            !it.isCluster
-        }.map {
+        val redis = redisConfigs.map {
             val resources = ClientResources.builder()
                 .apply {
                     this.commandLatencyRecorder(recorder)
                 }.build()
-            it.key to RedisClient.create(resources, it.value.uri)
-        }.toMap()
-
-        val cluster = redisConfigs.filterValues {
-            it.isCluster
-        }.map {
-            val resources = ClientResources.builder()
-                .apply {
-                    this.commandLatencyRecorder(recorder)
-                }.build()
-            it.key to RedisClusterClient.create(resources, it.value.uri)
+            if (it.value.isCluster) {
+                val options = getClusterOptions()
+                val client =  RedisClusterClient.create(resources, it.value.uri)
+                client.setOptions(options)
+                it.key to client.connect().apply{
+                    this.readFrom = ReadFrom.REPLICA_PREFERRED
+                }.async()
+            } else {
+                val options = getClientOptions()
+                val client =  RedisClient.create(resources, it.value.uri)
+                client.options = options
+                it.key to client.connect().async()
+            }
         }.toMap()
         return RedisContainer(
             redis,
-            cluster
         )
     }
 }

@@ -15,23 +15,23 @@ import dev.angerm.ag_server.http.HttpHandler
 import dev.angerm.ag_server.http.SimpleHttpDecorator
 import dev.angerm.ag_server.redis.RedisContainer
 import dev.angerm.ag_server.redis.RedisModule
+import dev.angerm.ag_server.redis.SimpleRedis
 import io.lettuce.core.RedisClient
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 
-class RedisHandler(redis: Map<String, RedisClient>) : HttpHandler {
+class RedisHandler(private val connection: SimpleRedis) : HttpHandler {
     override val pathPrefix: String
         get() = "/redis"
-    private val connection = redis["default"]?.connect()?.async()
 
     @Get("/:key")
     suspend fun get(@Param("key") key: String): String {
-        return connection?.get(key)?.await() ?: "no key"
+        return connection.get(key).await()
     }
 
     @Post("/:key")
     suspend fun post(@Param("key") key: String, body: String): String {
-        return connection?.set(key, body)?.await() ?: "failure"
+        return connection.set(key, body).await()
     }
 }
 
@@ -52,7 +52,7 @@ class ExampleModule : AbstractModule() {
     fun getRedisHandler(
         redis: RedisContainer
     ): HttpHandler {
-        return RedisHandler(redis.redisClients)
+        return RedisHandler(redis.redisClients["default"]!!)
     }
 
     @ProvidesIntoSet
