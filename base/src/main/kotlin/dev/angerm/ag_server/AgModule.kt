@@ -44,7 +44,7 @@ class AgModule(
          */
         fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
     }
-    private val environment = System.getenv("ENVIRONMENT")?.toLowerCase() ?: "test"
+    private val environment = System.getenv("ENVIRONMENT")?.lowercase() ?: "test"
 
     override fun configure() {
         if (registry != CollectorRegistry.defaultRegistry) {
