@@ -154,9 +154,9 @@ class AgModule(
             .from.yaml.resource("base.yml", true)
             .from.json.resource("base.json", true)
             .from.toml.resource("base.toml", true)
-            .from.yaml.resource("${environment.name}.yml", true)
-            .from.json.resource("${environment.name}.json", true)
-            .from.toml.resource("${environment.name}.toml", true)
+            .from.yaml.resource("${environment.env}.yml", true)
+            .from.json.resource("${environment.env}.json", true)
+            .from.toml.resource("${environment.env}.toml", true)
             .from.systemProperties()
             .from.env()
     }
