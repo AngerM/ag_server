@@ -29,7 +29,7 @@ allprojects {
       }
 
 
-      api platform("com.linecorp.armeria:armeria-bom:1.6.0")
+      api platform("com.linecorp.armeria:armeria-bom:1.7.2")
       ['armeria',
        'armeria-kotlin',
        'armeria-logback',
