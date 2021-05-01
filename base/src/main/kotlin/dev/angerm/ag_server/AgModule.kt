@@ -44,7 +44,9 @@ class AgModule(
          */
         fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
     }
-    private val environment = System.getenv("ENVIRONMENT")?.lowercase() ?: "test"
+    private val environment = EnvironmentUtil.getEnvironment(
+        System.getenv("ENVIRONMENT")?.lowercase()
+    )
 
     override fun configure() {
         if (registry != CollectorRegistry.defaultRegistry) {
@@ -152,9 +154,9 @@ class AgModule(
             .from.yaml.resource("base.yml", true)
             .from.json.resource("base.json", true)
             .from.toml.resource("base.toml", true)
-            .from.yaml.resource("$environment.yml", true)
-            .from.json.resource("$environment.json", true)
-            .from.toml.resource("$environment.toml", true)
+            .from.yaml.resource("${environment.name}.yml", true)
+            .from.json.resource("${environment.name}.json", true)
+            .from.toml.resource("${environment.name}.toml", true)
             .from.systemProperties()
             .from.env()
     }
