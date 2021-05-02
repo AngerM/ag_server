@@ -97,8 +97,10 @@ class AppImpl @Inject constructor(
 }
 
 fun main() {
+    val env = Environment()
     val injector = Guice.createInjector(
-        AgModule(),
+        env.getGuiceStage(),
+        AgModule(env),
     )
     val server = AgModule.getServer(injector)
     server.runBlocking()

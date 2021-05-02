@@ -4,6 +4,7 @@ import com.google.inject.Guice
 import com.linecorp.armeria.client.WebClient
 import dev.angerm.ag_server.AgModule
 import dev.angerm.ag_server.App
+import dev.angerm.ag_server.Environment
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -11,8 +12,10 @@ import kotlin.test.assertEquals
 
 class AppTest {
     fun withServer(f: suspend (App) -> Any) {
+        val env = Environment()
         val injector = Guice.createInjector(
-            AgModule(registry = CollectorRegistry(), autoPort = true),
+            env.getGuiceStage(),
+            AgModule(env, registry = CollectorRegistry(), autoPort = true),
         )
         val server = AgModule.getServer(injector)
         server.start()
