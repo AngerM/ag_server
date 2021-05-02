@@ -32,7 +32,7 @@ import java.util.concurrent.Executors
  * @param autoPort tells AgModule to ignore the config and bind to any available port
  */
 class AgModule(
-    private val environment: Environment = Environment(),
+    private val environment: Environment,
     private val defaultHandler: HttpHandler = DefaultHandler(),
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
