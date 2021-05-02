@@ -1,15 +1,28 @@
 package dev.angerm.ag_server
 
-enum class Environment(val env: String) {
-    Prod("prod"),
-    Staging("staging"),
-    Local("local"),
-    Test("test")
-}
-object EnvironmentUtil {
-    private val nameToEnv: Map<String, Environment> = Environment.values().map {
-        it.env to it
-    }.toMap()
+import com.google.inject.Stage as GStage
 
-    fun getEnvironment(env: String?): Environment = nameToEnv[env] ?: Environment.Local
+class Environment {
+    enum class Stage(val envVar: String) {
+        Prod("prod"),
+        Staging("staging"),
+        Local("local"),
+        Test("test")
+    }
+    companion object {
+        private val nameToEnv: Map<String, Stage> = Stage.values().associateBy {
+            it.envVar
+        }
+
+        fun getStage(env: String?): Stage = nameToEnv[env?.lowercase()] ?: Stage.Local
+    }
+
+    val stage = getStage(System.getenv("STAGE"))
+    val serviceName = System.getenv("SERVICE_NAME") ?: "UNKNOWN"
+    fun getGuiceStage(): GStage {
+        return when (stage) {
+            in setOf(Stage.Prod, Stage.Staging) -> GStage.PRODUCTION
+            else -> GStage.DEVELOPMENT
+        }
+    }
 }

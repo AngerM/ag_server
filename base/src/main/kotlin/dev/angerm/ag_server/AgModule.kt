@@ -32,6 +32,7 @@ import java.util.concurrent.Executors
  * @param autoPort tells AgModule to ignore the config and bind to any available port
  */
 class AgModule(
+    private val environment: Environment = Environment(),
     private val defaultHandler: HttpHandler = DefaultHandler(),
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
@@ -44,9 +45,6 @@ class AgModule(
          */
         fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
     }
-    private val environment = EnvironmentUtil.getEnvironment(
-        System.getenv("ENVIRONMENT")?.lowercase()
-    )
 
     override fun configure() {
         if (registry != CollectorRegistry.defaultRegistry) {
@@ -54,6 +52,7 @@ class AgModule(
         }
         bind(CollectorRegistry::class.java).toInstance(registry)
         Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
+        bind(Environment::class.java).toInstance(environment)
     }
 
     /**
@@ -154,9 +153,9 @@ class AgModule(
             .from.yaml.resource("base.yml", true)
             .from.json.resource("base.json", true)
             .from.toml.resource("base.toml", true)
-            .from.yaml.resource("${environment.env}.yml", true)
-            .from.json.resource("${environment.env}.json", true)
-            .from.toml.resource("${environment.env}.toml", true)
+            .from.yaml.resource("${environment.stage.envVar}.yml", true)
+            .from.json.resource("${environment.stage.envVar}.json", true)
+            .from.toml.resource("${environment.stage.envVar}.toml", true)
             .from.systemProperties()
             .from.env()
     }
