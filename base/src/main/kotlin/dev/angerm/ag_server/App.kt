@@ -1,6 +1,5 @@
 package dev.angerm.ag_server
 
-import com.google.inject.Guice
 import com.google.inject.Inject
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
@@ -98,10 +97,7 @@ class AppImpl @Inject constructor(
 
 fun main() {
     val env = Environment()
-    val injector = Guice.createInjector(
-        env.getGuiceStage(),
-        AgModule(env),
-    )
+    val injector = env.createAgInjector()
     val server = AgModule.getServer(injector)
     server.runBlocking()
 }

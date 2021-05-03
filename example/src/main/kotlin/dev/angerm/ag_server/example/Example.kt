@@ -1,7 +1,6 @@
 package dev.angerm.ag_server.example
 
 import com.google.inject.AbstractModule
-import com.google.inject.Guice
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.linecorp.armeria.common.logging.RequestLog
 import com.linecorp.armeria.server.ServiceRequestContext
@@ -68,9 +67,7 @@ class ExampleModule : AbstractModule() {
 
 fun main() {
     val env = Environment()
-    val injector = Guice.createInjector(
-        env.getGuiceStage(),
-        AgModule(env),
+    val injector = env.createAgInjector(
         GrpcModule(),
         RedisModule(),
         ExampleModule(),
