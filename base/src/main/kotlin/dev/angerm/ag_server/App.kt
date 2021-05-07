@@ -1,6 +1,9 @@
 package dev.angerm.ag_server
 
+import com.google.inject.AbstractModule
+import com.google.inject.Guice
 import com.google.inject.Inject
+import com.google.inject.Injector
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
@@ -17,6 +20,23 @@ interface App {
     fun stop(): CompletableFuture<*>
     fun runBlocking()
     fun port(): Int
+
+    companion object {
+        fun createInjector(vararg modules: AbstractModule): Injector {
+            val env = Environment()
+            return Guice.createInjector(
+                env.getGuiceStage(),
+                AgModule(env),
+                *modules,
+            )
+        }
+        /**
+         * Convenience method to get an App instance from the injector
+         * @param injector a Guice injector that has had AgModule added to it
+         * @return an App instance to start the server from
+         */
+        fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
+    }
 }
 
 /**
@@ -96,8 +116,7 @@ class AppImpl @Inject constructor(
 }
 
 fun main() {
-    val env = Environment()
-    val injector = env.createAgInjector()
-    val server = AgModule.getServer(injector)
+    val injector = App.createInjector()
+    val server = App.getServer(injector)
     server.runBlocking()
 }

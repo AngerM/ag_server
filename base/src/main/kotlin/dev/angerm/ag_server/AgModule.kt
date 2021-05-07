@@ -37,14 +37,6 @@ class AgModule(
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
 ) : AbstractModule() {
-    companion object {
-        /**
-         * Convenience method to get an App instance from the injector
-         * @param injector a Guice injector that has had AgModule added to it
-         * @return an App instance to start the server from
-         */
-        fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
-    }
 
     override fun configure() {
         if (registry != CollectorRegistry.defaultRegistry) {

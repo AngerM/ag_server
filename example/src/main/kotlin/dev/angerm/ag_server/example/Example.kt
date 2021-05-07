@@ -7,8 +7,7 @@ import com.linecorp.armeria.server.ServiceRequestContext
 import com.linecorp.armeria.server.annotation.Get
 import com.linecorp.armeria.server.annotation.Param
 import com.linecorp.armeria.server.annotation.Post
-import dev.angerm.ag_server.AgModule
-import dev.angerm.ag_server.Environment
+import dev.angerm.ag_server.App
 import dev.angerm.ag_server.grpc.GrpcModule
 import dev.angerm.ag_server.http.HttpDecorator
 import dev.angerm.ag_server.http.HttpHandler
@@ -66,12 +65,11 @@ class ExampleModule : AbstractModule() {
 }
 
 fun main() {
-    val env = Environment()
-    val injector = env.createAgInjector(
+    val injector = App.createInjector(
         GrpcModule(),
         RedisModule(),
         ExampleModule(),
     )
-    val server = AgModule.getServer(injector)
+    val server = App.getServer(injector)
     server.runBlocking()
 }
