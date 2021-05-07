@@ -1,5 +1,6 @@
 package dev.angerm
 
+import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.linecorp.armeria.client.WebClient
 import dev.angerm.ag_server.AgModule
@@ -11,20 +12,23 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AppTest {
-    fun withServer(f: suspend (App) -> Any) {
-        val env = Environment()
-        val injector = Guice.createInjector(
-            env.getGuiceStage(),
-            AgModule(env, registry = CollectorRegistry(), autoPort = true),
-        )
-        val server = AgModule.getServer(injector)
-        server.start()
-        try {
-            runBlocking {
-                f(server)
+    companion object {
+        fun withServer(vararg modules: AbstractModule, f: suspend (App) -> Any) {
+            val env = Environment()
+            val injector = Guice.createInjector(
+                env.getGuiceStage(),
+                AgModule(env, registry = CollectorRegistry(), autoPort = true),
+                *modules,
+            )
+            val server = App.getServer(injector)
+            server.start()
+            try {
+                runBlocking {
+                    f(server)
+                }
+            } finally {
+                server.stop().join()
             }
-        } finally {
-            server.stop().join()
         }
     }
     @Test fun testAppDefault() = withServer { server ->
