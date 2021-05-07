@@ -8,6 +8,8 @@ import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.http.HttpHandler
+import io.prometheus.client.CollectorRegistry
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
@@ -36,6 +38,35 @@ interface App {
          * @return an App instance to start the server from
          */
         fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
+
+        /**
+         * Convenience method for writing unit tests by running a full server instance
+         * on a random port.
+         * <pre>{@code
+         * @Test fun myTest() = App.testServer { server ->
+         *   // Whatever you want to test here
+         * }
+         * }</pre>
+         * @param modules Guice modules you want to be added to this server
+         * @param f generally a lambda you that contains your actual test
+         */
+        fun testServer(vararg modules: AbstractModule, f: suspend (App) -> Any) {
+            val env = Environment()
+            val injector = Guice.createInjector(
+                env.getGuiceStage(),
+                AgModule(env, registry = CollectorRegistry(), autoPort = true),
+                *modules,
+            )
+            val server = App.getServer(injector)
+            server.start()
+            try {
+                runBlocking {
+                    f(server)
+                }
+            } finally {
+                server.stop().join()
+            }
+        }
     }
 }
 
