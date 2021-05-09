@@ -7,3 +7,5 @@ This is an opinionated set of Kotlin/Java components that combine [Armeria](http
 You can selectively use the parts you want or add in your own modules and config as desired.
 
 See the example folder for a simple example. The Dockerfile also builds the example app
+
+Available currently on my github maven repo: https://github.com/AngerM/maven
