@@ -2,10 +2,19 @@ plugins {
     id 'application'
 }
 
+repositories {
+    maven {
+      url = "https://raw.githubusercontent.com/AngerM/maven/main/"
+    }
+}
+
 dependencies {
-    implementation project(":base")
-    implementation project(":redis")
-    implementation project(":grpc")
+    ['base',
+    'grpc',
+    'redis'
+    ].each {
+        implementation "dev.angerm.ag_server:${it}:0.0.1"
+    }
 }
 
 application {
