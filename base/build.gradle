@@ -7,4 +7,3 @@ dependencies { }
 application {
     mainClass = 'dev.angerm.ag_server.AppKt'
 }
-
