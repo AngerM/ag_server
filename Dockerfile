@@ -8,13 +8,13 @@ COPY build.gradle settings.gradle gradlew ./
 COPY gradle ./gradle
 RUN ./gradlew build || return 0
 
-COPY . /workspace
+COPY example/ /workspace
 
-RUN ./gradlew example:installDist --no-daemon
+RUN ./gradlew installDist --no-daemon
 
 FROM adoptopenjdk:16-jre-hotspot as runner
 WORKDIR /home
-COPY --from=builder /workspace/example/build/install .
+COPY --from=builder /workspace/build/install .
 
 ENV JAVA_OPTS=-XX:+UseZGC
 ENTRYPOINT ["/home/example/bin/example"]
