@@ -14,7 +14,7 @@ dependencies {
     api group: 'io.grpc', name: 'grpc-services', version: "$grpcVersion"
     api group: 'io.grpc', name: 'grpc-core', version: "$grpcVersion"
     api group: 'io.grpc', name: 'grpc-protobuf', version: "$grpcVersion"
-    api group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.16.0'
+    api group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.17.0'
     implementation project(':base')
 
     ['armeria-grpc',
