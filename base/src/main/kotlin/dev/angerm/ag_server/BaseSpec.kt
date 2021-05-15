@@ -15,4 +15,6 @@ object BaseSpec : ConfigSpec() {
     val rcvBuf by optional(1024 * 1024)
     val gracefulShutdownTimeSeconds by optional(15L)
     val shutdownTimeoutSeconds by optional(20L)
+    val http1MaxHeaderSize by optional(8192)
+    val http2MaxHeaderListSize by optional(8192L)
 }

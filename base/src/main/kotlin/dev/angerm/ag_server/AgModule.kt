@@ -113,6 +113,8 @@ class AgModule(
         sb.workerGroup(EventLoopGroups.newEventLoopGroup(conf[BaseSpec.numWorkerThreads], "worker_", true), true)
         sb.maxConnectionAge(Duration.ofSeconds(conf[BaseSpec.maxConnectionAgeSeconds]))
         sb.maxNumConnections(conf[BaseSpec.maxNumConnections])
+        sb.http1MaxHeaderSize(conf[BaseSpec.http1MaxHeaderSize])
+        sb.http2MaxHeaderListSize(conf[BaseSpec.http2MaxHeaderListSize])
         sb.blockingTaskExecutor(Executors.newScheduledThreadPool(conf[BaseSpec.blockingTaskThreadPoolSize]), true)
         sb.requestTimeout(Duration.ofSeconds(conf[BaseSpec.requestTimeoutSeconds]))
         sb.channelOption(ChannelOption.SO_BACKLOG, conf[BaseSpec.socketBacklog])
