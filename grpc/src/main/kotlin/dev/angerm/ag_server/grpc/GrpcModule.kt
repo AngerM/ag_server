@@ -3,9 +3,9 @@ package dev.angerm.ag_server.grpc
 import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.multibindings.ProvidesIntoSet
+import com.uchuhimo.konf.ConfigSpec
 import dev.angerm.ag_server.ArmeriaAddon
 import dev.angerm.ag_server.grpc.services.HealthService
-import com.uchuhimo.konf.ConfigSpec
 
 class GrpcModule(private val healthService: HealthService = HealthService()) : AbstractModule() {
     override fun configure() {

@@ -7,7 +7,6 @@ import com.linecorp.armeria.server.grpc.GrpcService
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.ArmeriaAddon
 import dev.angerm.ag_server.grpc.services.HealthService
-import io.grpc.Grpc
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition
