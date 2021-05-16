@@ -9,6 +9,7 @@ import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
+import com.uchuhimo.konf.source.hocon
 import com.uchuhimo.konf.source.toml
 import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.http.DefaultHandler
@@ -147,9 +148,11 @@ class AgModule(
             .from.yaml.resource("base.yml", true)
             .from.json.resource("base.json", true)
             .from.toml.resource("base.toml", true)
+            .from.hocon.resource("base.hocon", true)
             .from.yaml.resource("${environment.stage.envVar}.yml", true)
             .from.json.resource("${environment.stage.envVar}.json", true)
             .from.toml.resource("${environment.stage.envVar}.toml", true)
+            .from.hocon.resource("${environment.stage.envVar}.hocon", true)
             .from.systemProperties()
             .from.env()
     }
