@@ -17,7 +17,7 @@ class Environment(stageOverride: Stage? = null) {
         fun getStage(env: String?): Stage = nameToEnv[env?.lowercase()] ?: Stage.Local
     }
 
-    val stage = stageOverride?: getStage(System.getenv("STAGE"))
+    val stage = stageOverride ?: getStage(System.getenv("STAGE"))
     val serviceName = System.getenv("SERVICE_NAME") ?: "UNKNOWN"
     fun getGuiceStage(): GStage {
         return when (stage) {
