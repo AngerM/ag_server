@@ -5,8 +5,8 @@ import com.uchuhimo.konf.ConfigSpec
 object DatabaseSpec : ConfigSpec("") {
     data class DatabaseConfig(
         val protocol: String,
-        val hostname: String,
-        val port: Int,
+        val hostname: String = "",
+        val port: Int = 0,
         val database: String,
         val username: String = "",
         val passwordEnvVar: String = "",

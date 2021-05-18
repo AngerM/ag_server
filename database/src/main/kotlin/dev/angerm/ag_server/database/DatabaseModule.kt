@@ -4,7 +4,9 @@ import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
+import com.google.inject.multibindings.ProvidesIntoSet
 import com.uchuhimo.konf.Config
+import com.uchuhimo.konf.ConfigSpec
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.Option
@@ -15,6 +17,11 @@ data class DbContainer(
 )
 
 class DatabaseModule : AbstractModule() {
+    @ProvidesIntoSet
+    fun getConf(): ConfigSpec {
+        return DatabaseSpec
+    }
+
     @Provides
     @Inject
     @Singleton
@@ -28,11 +35,18 @@ class DatabaseModule : AbstractModule() {
                 this.option(ConnectionFactoryOptions.DRIVER, "pool")
                 this.option(ConnectionFactoryOptions.PROTOCOL, dbConf.protocol)
                 this.option(ConnectionFactoryOptions.DATABASE, dbConf.database)
-                this.option(ConnectionFactoryOptions.HOST, dbConf.hostname)
-                this.option(ConnectionFactoryOptions.PORT, dbConf.port)
+                if (dbConf.hostname.isNotBlank()) {
+                    this.option(ConnectionFactoryOptions.HOST, dbConf.hostname)
+                }
+                if (dbConf.port > 0) {
+                    this.option(ConnectionFactoryOptions.PORT, dbConf.port)
+                }
                 this.option(ConnectionFactoryOptions.SSL, dbConf.ssl)
                 this.option(ConnectionFactoryOptions.USER, dbConf.username)
-                this.option(ConnectionFactoryOptions.PASSWORD, System.getenv(dbConf.passwordEnvVar))
+                val pw = System.getenv(dbConf.passwordEnvVar)
+                if (!pw.isNullOrBlank()) {
+                    this.option(ConnectionFactoryOptions.PASSWORD, System.getenv(dbConf.passwordEnvVar))
+                }
                 this.option(Option.valueOf("initialSize"), dbConf.poolInitialSize)
                 this.option(Option.valueOf("maxSize"), dbConf.poolMaxSize)
                 dbConf.otherOptions.forEach { (optionName, value) ->

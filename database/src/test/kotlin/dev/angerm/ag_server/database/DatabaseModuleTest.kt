@@ -2,8 +2,10 @@ package dev.angerm.ag_server.database
 
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
+import dev.angerm.ag_server.App
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class DatabaseModuleTest {
     @Test
@@ -33,5 +35,20 @@ class DatabaseModuleTest {
         val value = first.otherOptions[first.otherOptions.keys.first()]!!
         assertEquals("someSpecificOption", first.otherOptions.keys.first())
         assertEquals("testValue", value)
+    }
+
+    @Test
+    fun testH2Connection()  {
+        App.testServer(DatabaseModule(),
+            rawYamlConfig = """
+               database:
+                 primary:
+                   protocol: h2:mem 
+                   database: test
+            """.trimIndent()) { server ->
+            val dbs = server.getInjector()?.getInstance(DbContainer::class.java)
+            val client = dbs?.clients?.entries?.firstOrNull()
+            assertNotNull(client)
+        }
     }
 }

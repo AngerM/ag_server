@@ -3,6 +3,7 @@ package dev.angerm.ag_server
 import com.google.inject.*
 import com.google.inject.multibindings.Multibinder
 import com.google.inject.multibindings.ProvidesIntoSet
+import com.google.inject.name.Named
 import com.linecorp.armeria.common.SessionProtocol
 import com.linecorp.armeria.common.util.EventLoopGroups
 import com.linecorp.armeria.server.Server
@@ -37,6 +38,7 @@ class AgModule(
     private val defaultHandler: HttpHandler = DefaultHandler(),
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
+    private val rawYamlConfig: String = "",
 ) : AbstractModule() {
 
     override fun configure() {
@@ -138,13 +140,14 @@ class AgModule(
     @Inject
     @Singleton
     fun getConfig(
-        specs: Set<ConfigSpec>
+        specs: Set<ConfigSpec>,
     ): Config {
         return Config {
             specs.forEach {
                 this.addSpec(it)
             }
         }
+            .from.yaml.string(rawYamlConfig)
             .from.yaml.resource("base.yml", true)
             .from.json.resource("base.json", true)
             .from.toml.resource("base.toml", true)

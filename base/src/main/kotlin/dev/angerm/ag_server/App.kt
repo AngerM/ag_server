@@ -22,6 +22,8 @@ interface App {
     fun stop(): CompletableFuture<*>
     fun runBlocking()
     fun port(): Int
+    fun getInjector(): Injector?
+    fun setInjector(injector: Injector)
 
     companion object {
         fun createInjector(vararg modules: AbstractModule): Injector {
@@ -37,7 +39,11 @@ interface App {
          * @param injector a Guice injector that has had AgModule added to it
          * @return an App instance to start the server from
          */
-        fun getServer(injector: Injector): App = injector.getInstance(App::class.java)
+        fun getServer(injector: Injector): App  {
+            val app = injector.getInstance(App::class.java)
+            app.setInjector(injector)
+            return app
+        }
 
         /**
          * Convenience method for writing unit tests by running a full server instance
@@ -50,14 +56,14 @@ interface App {
          * @param modules Guice modules you want to be added to this server
          * @param f generally a lambda you that contains your actual test
          */
-        fun testServer(vararg modules: AbstractModule, f: suspend (App) -> Any) {
+        fun testServer(vararg modules: AbstractModule, rawYamlConfig: String = "", f: suspend (App) -> Any) {
             val env = Environment()
             val injector = Guice.createInjector(
                 env.getGuiceStage(),
-                AgModule(env, registry = CollectorRegistry(), autoPort = true),
+                AgModule(env, registry = CollectorRegistry(), autoPort = true, rawYamlConfig = rawYamlConfig),
                 *modules,
             )
-            val server = App.getServer(injector)
+            val server = getServer(injector)
             server.start()
             try {
                 runBlocking {
@@ -88,6 +94,8 @@ class AppImpl @Inject constructor(
     private val shutdownTimeoutSeconds: Long = config[BaseSpec.shutdownTimeoutSeconds]
     private val server: Server
     private val logger = KotlinLogging.logger {}
+    private var appInjector: Injector? = null
+
     init {
         logger.info("App creation started")
         decorators.decorators.forEach {
@@ -144,6 +152,12 @@ class AppImpl @Inject constructor(
 
     override fun port(): Int =
         server.config().ports().first()?.localAddress()?.port ?: 0
+
+    override fun getInjector(): Injector? = appInjector
+
+    override fun setInjector(injector: Injector) {
+        appInjector = injector
+    }
 }
 
 fun main() {
