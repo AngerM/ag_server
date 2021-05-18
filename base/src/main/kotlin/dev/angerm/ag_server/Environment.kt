@@ -2,7 +2,7 @@ package dev.angerm.ag_server
 
 import com.google.inject.Stage as GStage
 
-class Environment {
+class Environment(stageOverride: Stage? = null) {
     enum class Stage(val envVar: String) {
         Prod("prod"),
         Staging("staging"),
@@ -17,7 +17,7 @@ class Environment {
         fun getStage(env: String?): Stage = nameToEnv[env?.lowercase()] ?: Stage.Local
     }
 
-    val stage = getStage(System.getenv("STAGE"))
+    val stage = stageOverride?: getStage(System.getenv("STAGE"))
     val serviceName = System.getenv("SERVICE_NAME") ?: "UNKNOWN"
     fun getGuiceStage(): GStage {
         return when (stage) {

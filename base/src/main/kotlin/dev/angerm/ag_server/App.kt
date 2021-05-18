@@ -57,7 +57,7 @@ interface App {
          * @param f generally a lambda you that contains your actual test
          */
         fun testServer(vararg modules: AbstractModule, rawYamlConfig: String = "", f: suspend (App) -> Any) {
-            val env = Environment()
+            val env = Environment(Environment.Stage.Test)
             val injector = Guice.createInjector(
                 env.getGuiceStage(),
                 AgModule(env, registry = CollectorRegistry(), autoPort = true, rawYamlConfig = rawYamlConfig),
