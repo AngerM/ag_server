@@ -42,7 +42,9 @@ class DatabaseModule : AbstractModule() {
                     this.option(ConnectionFactoryOptions.PORT, dbConf.port)
                 }
                 this.option(ConnectionFactoryOptions.SSL, dbConf.ssl)
-                this.option(ConnectionFactoryOptions.USER, dbConf.username)
+                if (dbConf.username.isNotBlank()) {
+                    this.option(ConnectionFactoryOptions.USER, dbConf.username)
+                }
                 val pw = System.getenv(dbConf.passwordEnvVar)
                 if (!pw.isNullOrBlank()) {
                     this.option(ConnectionFactoryOptions.PASSWORD, System.getenv(dbConf.passwordEnvVar))

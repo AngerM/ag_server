@@ -3,7 +3,6 @@ package dev.angerm.ag_server
 import com.google.inject.*
 import com.google.inject.multibindings.Multibinder
 import com.google.inject.multibindings.ProvidesIntoSet
-import com.google.inject.name.Named
 import com.linecorp.armeria.common.SessionProtocol
 import com.linecorp.armeria.common.util.EventLoopGroups
 import com.linecorp.armeria.server.Server

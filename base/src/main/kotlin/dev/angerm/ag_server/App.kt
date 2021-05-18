@@ -39,7 +39,7 @@ interface App {
          * @param injector a Guice injector that has had AgModule added to it
          * @return an App instance to start the server from
          */
-        fun getServer(injector: Injector): App  {
+        fun getServer(injector: Injector): App {
             val app = injector.getInstance(App::class.java)
             app.setInjector(injector)
             return app
