@@ -115,6 +115,7 @@ allprojects {
     }
 
     signing {
+        sign configurations.archives
         sign publishing.publications.agLibrary
     }
 }
