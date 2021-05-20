@@ -20,7 +20,7 @@ allprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
     group = 'dev.angerm.ag_server'
-    version= "0.1.0"
+    version= "0.1.1-SNAPSHOT"
 
     dependencies {
         implementation platform('org.jetbrains.kotlin:kotlin-bom')
@@ -117,8 +117,13 @@ allprojects {
             }
         }
     }
+    tasks.withType(Sign) {
+        onlyIf { isReleaseVersion }
+    }
 
+    ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
     signing {
+        required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
         sign configurations.archives
         sign publishing.publications.agLibrary
     }
