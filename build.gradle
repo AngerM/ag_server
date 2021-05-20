@@ -108,8 +108,12 @@ allprojects {
                             email = 'matt@angerm.dev'
                         }
                     }
+                    scm {
+                        connection = 'scm:git:https://github.com/AngerM/ag_server.git'
+                        developerConnection = 'scm:git:https://github.com/AngerM/ag_server.git'
+                        url = 'https://github.com/AngerM/ag_server'
+                    }
                 }
-
             }
         }
     }
