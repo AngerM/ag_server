@@ -1,6 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
-    id "org.jetbrains.dokka" version "$dokkaVersion"
+    id "org.jetbrains.dokka" version "1.4.32"
     id "org.jmailen.kotlinter" version "3.4.4"
     id "com.github.ben-manes.versions" version "0.38.0"
     id 'maven-publish'
@@ -11,6 +11,7 @@ allprojects {
     apply plugin: "org.jetbrains.dokka"
     apply plugin: "org.jmailen.kotlinter"
     apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
     repositories {
         mavenCentral()
@@ -19,46 +20,46 @@ allprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
     group = 'dev.angerm.ag_server'
-    version= "0.0.5"
+    version= "0.1.0"
 
-  dependencies {
-      implementation platform('org.jetbrains.kotlin:kotlin-bom')
-      api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-      [ 'kotlinx-coroutines-core',
-        'kotlinx-coroutines-reactor',
-        'kotlinx-coroutines-jdk8',
-        'kotlinx-coroutines-slf4j',
-      ].each {
-        api "org.jetbrains.kotlinx:${it}:1.5.0"
-      }
+    dependencies {
+        implementation platform('org.jetbrains.kotlin:kotlin-bom')
+        api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+        [ 'kotlinx-coroutines-core',
+          'kotlinx-coroutines-reactor',
+          'kotlinx-coroutines-jdk8',
+          'kotlinx-coroutines-slf4j',
+        ].each {
+            api "org.jetbrains.kotlinx:${it}:1.5.0"
+        }
 
 
-      api platform("com.linecorp.armeria:armeria-bom:1.8.0")
-      ['armeria',
-       'armeria-kotlin',
-       'armeria-logback',
-       'armeria-retrofit2',
-       'armeria-rxjava3',
-      ].each {
-        api "com.linecorp.armeria:${it}"
-      }
-      api 'io.github.microutils:kotlin-logging-jvm:2.0.6'
-      api 'com.uchuhimo:konf:1.1.2'
+        api platform("com.linecorp.armeria:armeria-bom:1.8.0")
+        ['armeria',
+         'armeria-kotlin',
+         'armeria-logback',
+         'armeria-retrofit2',
+         'armeria-rxjava3',
+        ].each {
+            api "com.linecorp.armeria:${it}"
+        }
+        api 'io.github.microutils:kotlin-logging-jvm:2.0.6'
+        api 'com.uchuhimo:konf:1.1.2'
 
-      ['simpleclient',
-      'simpleclient_hotspot',
-      'simpleclient_httpserver',
-      ].each {
-        api "io.prometheus:${it}:0.10.0"
-      }
+        ['simpleclient',
+         'simpleclient_hotspot',
+         'simpleclient_httpserver',
+        ].each {
+            api "io.prometheus:${it}:0.10.0"
+        }
 
-      api "com.google.inject:guice:5.0.1"
+        api "com.google.inject:guice:5.0.1"
 
-      testImplementation 'org.jetbrains.kotlin:kotlin-test'
-      testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+        testImplementation 'org.jetbrains.kotlin:kotlin-test'
+        testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
 
-      dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:$dokkaVersion"
-  }
+        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.4.32"
+    }
 
     tasks.withType(JavaCompile) {
         options.compilerArgs += '-parameters'
@@ -69,14 +70,53 @@ allprojects {
             jvmTarget = "11"
         }
     }
-    publishing {
-      publications {
-        agLibrary(MavenPublication) {
-            from components.java
-        }
-      }
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
     }
 
+    publishing {
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+        publications {
+            agLibrary(MavenPublication) {
+                from components.java
+                pom {
+                    name = 'AG Server'
+                    description = 'A combination of Armeria+Guice'
+                    url = 'https://github.com/AngerM/ag_server'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://github.com/AngerM/ag_server/blob/main/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'AngerM'
+                            name = 'Matt Anger'
+                            email = 'matt@angerm.dev'
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.agLibrary
+    }
 }
 
 def isNonStable = { String version ->
