@@ -11,11 +11,12 @@ import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition
 import io.grpc.protobuf.services.ProtoReflectionService
+import io.prometheus.client.CollectorRegistry
 import me.dinowernli.grpc.prometheus.Configuration
 import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
 import java.util.concurrent.CompletableFuture
 
-class GrpcBuilder @Inject constructor(private val healthService: HealthService, conf: Config) : ArmeriaAddon {
+class GrpcBuilder @Inject constructor(private val healthService: HealthService, conf: Config, collectorRegistry: CollectorRegistry) : ArmeriaAddon {
     companion object {
         const val GLOBAL_INTERCEPTORS = "Global"
     }
@@ -30,7 +31,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
         builder.setMaxInboundMessageSizeBytes(conf[GrpcSpec.maxInboundMessageSizeBytes])
         builder.setMaxOutboundMessageSizeBytes(conf[GrpcSpec.maxOutboundMessageSizeBytes])
         defaultInterceptors.addAll(injectedInterceptors)
-        defaultInterceptors.add(MonitoringServerInterceptor.create(Configuration.allMetrics()))
+        defaultInterceptors.add(MonitoringServerInterceptor.create(Configuration.allMetrics().withCollectorRegistry(collectorRegistry)))
     }
 
     private fun build(): GrpcService {
