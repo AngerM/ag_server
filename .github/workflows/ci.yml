@@ -28,4 +28,4 @@ jobs:
           ./gradlew test
 
       - name: Build
-        run: ./gradlew build -x test  -x signArchives
+        run: ./gradlew build -x test
