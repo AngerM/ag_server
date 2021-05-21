@@ -8,7 +8,7 @@ You can selectively use the parts you want or add in your own modules and config
 
 See the example folder for a simple example. The Dockerfile also builds the example app
 
-Available on maven central. Example:
+Available on [maven central](https://search.maven.org/search?q=g:dev.angerm.ag_server). Example:
 ```
 dependencies {
     ['base',
