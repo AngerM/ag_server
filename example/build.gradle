@@ -6,9 +6,6 @@ plugins {
 }
 
 repositories {
-    maven {
-      url = "https://raw.githubusercontent.com/AngerM/maven/main/"
-    }
     mavenCentral()
 }
 
@@ -17,7 +14,7 @@ dependencies {
     'grpc',
     'redis'
     ].each {
-        implementation "dev.angerm.ag_server:${it}:0.0.3"
+        implementation "dev.angerm.ag_server:${it}:0.1.0"
     }
 }
 

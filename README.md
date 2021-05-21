@@ -8,4 +8,14 @@ You can selectively use the parts you want or add in your own modules and config
 
 See the example folder for a simple example. The Dockerfile also builds the example app
 
-Available currently on my github maven repo: https://github.com/AngerM/maven
+Available on maven central. Example:
+```
+dependencies {
+    ['base',
+    'grpc',
+    'redis'
+    ].each {
+        implementation "dev.angerm.ag_server:${it}:<VERSION_HERE>"
+    }
+}
+```
