@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jdk as builder
+FROM amazoncorretto:11 as builder
 
 RUN mkdir /workspace
 
@@ -8,11 +8,11 @@ COPY build.gradle settings.gradle gradlew ./
 COPY gradle ./gradle
 RUN ./gradlew build || return 0
 
-COPY example/ /workspace
+COPY . /workspace
 
 RUN ./gradlew installDist --no-daemon
 
-FROM adoptopenjdk:16-jre-hotspot as runner
+FROM amazoncorretto:16 as runner
 WORKDIR /home
 COPY --from=builder /workspace/build/install .
 
