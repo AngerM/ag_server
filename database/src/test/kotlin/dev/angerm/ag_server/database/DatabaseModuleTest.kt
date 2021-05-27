@@ -77,9 +77,14 @@ class DatabaseModuleTest {
                 "INSERT INTO MY_TABLE VALUES(2, 'USER2');"
             ).execute().awaitSingle()
             val result2 = conn.createStatement(
-            "SELECT COUNT(*) FROM MY_TABLE;"
-            ).execute().awaitSingle()
-            val count = result2.map { row, _ -> row.get(0) }.awaitSingle()
-            assertEquals(2, count as Long)
+                "SELECT COUNT(*) FROM MY_TABLE;"
+            ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
+            assertEquals(2, result2 as Long)
+
+            val conn2 = client.connectionFactory.create().awaitSingle()
+            val result3 = conn2.createStatement(
+                "SELECT COUNT(*) FROM MY_TABLE;"
+            ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
+            assertEquals(2, result3 as Long)
         }
 }
