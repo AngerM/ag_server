@@ -15,9 +15,7 @@ import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.http.DefaultHandler
 import dev.angerm.ag_server.http.HttpDecorator
 import dev.angerm.ag_server.http.HttpHandler
-import dev.angerm.ag_server.http.HttpMetricDecorator
 import dev.angerm.ag_server.http.PrometheusHandler
-import dev.angerm.ag_server.http.SimpleHttpDecorator
 import io.netty.channel.ChannelOption
 import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.hotspot.DefaultExports
