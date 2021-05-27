@@ -7,10 +7,13 @@ import com.google.inject.Singleton
 import com.google.inject.multibindings.ProvidesIntoSet
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
+import io.r2dbc.pool.ConnectionPool
+import io.r2dbc.pool.ConnectionPoolConfiguration
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.Option
 import org.springframework.r2dbc.core.DatabaseClient
+import java.time.Duration
 
 data class DbContainer(
     val clients: Map<String, DatabaseClient>
@@ -32,7 +35,7 @@ class DatabaseModule : AbstractModule() {
         val clients = dbConfigs.map {
             val dbConf = it.value
             val cfo = ConnectionFactoryOptions.builder().apply {
-                this.option(ConnectionFactoryOptions.DRIVER, "pool")
+                this.option(ConnectionFactoryOptions.DRIVER, dbConf.driver)
                 this.option(ConnectionFactoryOptions.PROTOCOL, dbConf.protocol)
                 this.option(ConnectionFactoryOptions.DATABASE, dbConf.database)
                 if (dbConf.hostname.isNotBlank()) {
@@ -49,14 +52,20 @@ class DatabaseModule : AbstractModule() {
                 if (!pw.isNullOrBlank()) {
                     this.option(ConnectionFactoryOptions.PASSWORD, System.getenv(dbConf.passwordEnvVar))
                 }
-                this.option(Option.valueOf("initialSize"), dbConf.poolInitialSize)
-                this.option(Option.valueOf("maxSize"), dbConf.poolMaxSize)
                 dbConf.otherOptions.forEach { (optionName, value) ->
                     this.option(Option.valueOf(optionName), value)
                 }
             }.build()
             val cf = ConnectionFactories.get(cfo)
-            it.key to DatabaseClient.create(cf)
+            val poolConfiguration = ConnectionPoolConfiguration.builder(cf).apply {
+                this.initialSize(dbConf.poolInitialSize)
+                this.maxSize(dbConf.poolMaxSize)
+                this.maxLifeTime(Duration.ofMinutes(15))
+                this.maxIdleTime(Duration.ofMinutes(5))
+                this.maxAcquireTime(Duration.ofSeconds(5))
+            }.build()
+            val pool = ConnectionPool(poolConfiguration)
+            it.key to DatabaseClient.create(pool)
         }.toMap()
         return DbContainer(clients)
     }

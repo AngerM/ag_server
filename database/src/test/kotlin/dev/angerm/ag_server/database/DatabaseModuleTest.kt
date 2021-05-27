@@ -4,7 +4,9 @@ import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.App
 import kotlinx.coroutines.reactive.awaitSingle
+import org.springframework.r2dbc.core.await
 import org.springframework.r2dbc.core.awaitOneOrNull
+import org.springframework.r2dbc.core.awaitSingle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -46,23 +48,24 @@ class DatabaseModuleTest {
             rawYamlConfig = """
                database:
                  primary:
-                   protocol: h2:mem 
+                   driver: h2
+                   protocol: mem 
                    database: test
             """.trimIndent()
         ) { server ->
             val dbs = server.getInjector()?.getInstance(DbContainer::class.java)
             val client = dbs?.clients?.entries?.firstOrNull()?.value
             assertNotNull(client)
+            // This may be an artifact of H2, but after this is executed the db disappears?
             val result = client.sql(
                 """
                 CREATE TABLE MY_TABLE(ID INT, NAME VARCHAR(255));
                 INSERT INTO MY_TABLE VALUES(1, 'USER1');
                 SELECT COUNT(*) FROM MY_TABLE;
                 """.trimIndent()
-            ).map {
-                row ->
-                row.get(0)
-            }.awaitOneOrNull()
+            ).fetch().awaitSingle().map {
+                it.value
+            }.firstOrNull()
             assertEquals(1, result as Long)
 
             // Alternative method
@@ -81,6 +84,7 @@ class DatabaseModuleTest {
             ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
             assertEquals(2, result2 as Long)
 
+            // We create a second conn and this db still exists?
             val conn2 = client.connectionFactory.create().awaitSingle()
             val result3 = conn2.createStatement(
                 "SELECT COUNT(*) FROM MY_TABLE;"
