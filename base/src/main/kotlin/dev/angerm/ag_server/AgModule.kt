@@ -160,17 +160,4 @@ class AgModule(
             .from.systemProperties()
             .from.env()
     }
-
-    @ProvidesIntoSet
-    @Inject
-    @Singleton
-    fun getDefaultDecorators(
-        metrics: Metrics
-    ): List<HttpDecorator> {
-        return listOf<HttpDecorator>(
-            SimpleHttpDecorator.Wrapper { _, ctx, _ ->
-                HttpMetricDecorator(ctx, metrics)
-            }
-        )
-    }
 }

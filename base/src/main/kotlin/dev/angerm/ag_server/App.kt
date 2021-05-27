@@ -8,6 +8,8 @@ import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.http.HttpHandler
+import dev.angerm.ag_server.http.HttpMetricDecorator
+import dev.angerm.ag_server.http.SimpleHttpDecorator
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
@@ -86,10 +88,11 @@ interface App {
  */
 class AppImpl @Inject constructor(
     config: Config,
+    metrics: Metrics,
     builder: ServerBuilder,
     handlers: Set<HttpHandler>,
     decorators: AgModule.HttpDecorators,
-    private val addons: AgModule.ArmeriaAddons
+    private val addons: AgModule.ArmeriaAddons,
 ) : App {
     private val shutdownTimeoutSeconds: Long = config[BaseSpec.shutdownTimeoutSeconds]
     private val server: Server
@@ -100,10 +103,17 @@ class AppImpl @Inject constructor(
         logger.info("App creation started")
         decorators.decorators.forEach {
             orderedDecoratorList ->
-            orderedDecoratorList.forEach {
+            // Decorators are run in reverse order
+            orderedDecoratorList.reversed().forEach {
                 builder.decorator(it.forRoute(), it)
             }
         }
+        // Insert this one last so its always first to run
+        builder.decorator(
+            SimpleHttpDecorator.Wrapper { _, ctx, _ ->
+                HttpMetricDecorator(ctx, metrics)
+            }
+        )
         handlers.forEach {
             builder.annotatedService(it.pathPrefix, it)
         }
