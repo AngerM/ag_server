@@ -3,6 +3,7 @@ package dev.angerm.ag_server.database
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.App
+import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.r2dbc.core.awaitOneOrNull
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -63,5 +64,22 @@ class DatabaseModuleTest {
                 row.get(0)
             }.awaitOneOrNull()
             assertEquals(1, result as Long)
+
+            // Alternative method
+            val conn = client.connectionFactory.create().awaitSingle()
+            conn.createStatement(
+                "CREATE TABLE MY_TABLE(ID INT, NAME VARCHAR(255));"
+            ).execute().awaitSingle()
+            conn.createStatement(
+                "INSERT INTO MY_TABLE VALUES(1, 'USER1');"
+            ).execute().awaitSingle()
+            conn.createStatement(
+                "INSERT INTO MY_TABLE VALUES(2, 'USER2');"
+            ).execute().awaitSingle()
+            val result2 = conn.createStatement(
+            "SELECT COUNT(*) FROM MY_TABLE;"
+            ).execute().awaitSingle()
+            val count = result2.map { row, _ -> row.get(0) }.awaitSingle()
+            assertEquals(2, count as Long)
         }
 }
