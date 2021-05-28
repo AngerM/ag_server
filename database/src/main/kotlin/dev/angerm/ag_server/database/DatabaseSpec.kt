@@ -14,6 +14,9 @@ object DatabaseSpec : ConfigSpec("") {
         val ssl: Boolean = false,
         val poolInitialSize: Int = 10,
         val poolMaxSize: Int = 10,
+        val maxConnLifetimeMinutes: Long = 15,
+        val maxConnIdleLifetimeMinutes: Long = 5,
+        val maxConnAcquireTimeSeconds: Long = 5,
         val otherOptions: Map<String, Any> = mapOf()
     )
     val database by optional(mapOf<String, DatabaseConfig>())

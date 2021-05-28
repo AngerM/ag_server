@@ -77,7 +77,6 @@ class DatabaseModuleTest {
             ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
             assertEquals(3, result2 as Long)
 
-            // We create a second conn and this db still exists?
             val conn2 = client.connectionFactory.create().awaitSingle()
             val result3 = conn2.createStatement(
                 "SELECT COUNT(*) FROM MY_TABLE;"

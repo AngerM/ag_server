@@ -62,9 +62,9 @@ class DatabaseModule : AbstractModule() {
             val poolConfiguration = ConnectionPoolConfiguration.builder(cf).apply {
                 this.initialSize(dbConf.poolInitialSize)
                 this.maxSize(dbConf.poolMaxSize)
-                this.maxLifeTime(Duration.ofMinutes(15))
-                this.maxIdleTime(Duration.ofMinutes(5))
-                this.maxAcquireTime(Duration.ofSeconds(5))
+                this.maxLifeTime(Duration.ofMinutes(dbConf.maxConnLifetimeMinutes))
+                this.maxIdleTime(Duration.ofMinutes(dbConf.maxConnIdleLifetimeMinutes))
+                this.maxAcquireTime(Duration.ofSeconds(dbConf.maxConnAcquireTimeSeconds))
             }.build()
             val pool = ConnectionPool(poolConfiguration)
             it.key to DatabaseClient.create(pool)
