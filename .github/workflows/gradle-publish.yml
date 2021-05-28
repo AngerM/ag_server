@@ -35,3 +35,10 @@ jobs:
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish to Sonatype
+      run: |
+        echo $GPG_SEC_BASE64 | base64 --decode > $GITHUB_WORKSPACE/release.gpg
+        echo $GRADLE_PROPERTIES > ./gradle.properties
+        echo signing.secretKeyRingFile=$GITHUB_WORKSPACE/release.gpg >> ./gradle.properties
+        gradle publish
