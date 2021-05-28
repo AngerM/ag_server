@@ -1,7 +1,5 @@
 # Armeria+Guice Server ![Tests](https://github.com/AngerM/ag_server/actions/workflows/cd.yml/badge.svg)
 
-### Warning: Probably not production ready yet, but I've marked the latest releases as Beta as I am happier with the code organizaton thus far
-
 This is an opinionated set of Kotlin/Java components that combine [Armeria](https://armeria.dev/), [Guice](https://github.com/google/guice) and a few other libraries and utilites in a way I think make sense.
 
 You can selectively use the parts you want or add in your own modules and config as desired.
