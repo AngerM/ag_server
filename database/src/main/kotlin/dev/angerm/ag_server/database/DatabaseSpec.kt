@@ -5,7 +5,7 @@ import com.uchuhimo.konf.ConfigSpec
 object DatabaseSpec : ConfigSpec("") {
     data class DatabaseConfig(
         val driver: String,
-        val protocol: String,
+        val protocol: String = "",
         val hostname: String = "",
         val port: Int = 0,
         val database: String,

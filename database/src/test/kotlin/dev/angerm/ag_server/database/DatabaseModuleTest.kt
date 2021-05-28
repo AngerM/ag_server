@@ -18,7 +18,7 @@ class DatabaseModuleTest {
             """
                database:
                  primary:
-                   protocol: postgres
+                   driver: postgres
                    hostname: localhost
                    port: 5379
                    database: test
@@ -30,7 +30,7 @@ class DatabaseModuleTest {
         assertEquals(1, dbConfigs.size)
         val first = dbConfigs[dbConfigs.keys.first()]!!
         assertEquals("localhost", first.hostname)
-        assertEquals("postgres", first.protocol)
+        assertEquals("postgres", first.driver)
         assertEquals(5379, first.port)
         assertEquals("test", first.database)
         assertEquals(1, first.otherOptions.size)
@@ -54,7 +54,6 @@ class DatabaseModuleTest {
             val dbs = server.getInjector()?.getInstance(DbContainer::class.java)
             val client = dbs?.clients?.entries?.firstOrNull()?.value
             assertNotNull(client)
-            // This may be an artifact of H2, but after this is executed the db disappears?
             val result = client.sql(
                 """
                 CREATE TABLE MY_TABLE(ID INT, NAME VARCHAR(255));
@@ -66,11 +65,7 @@ class DatabaseModuleTest {
             }.firstOrNull()
             assertEquals(1, result as Long)
 
-            // Alternative method
             val conn = client.connectionFactory.create().awaitSingle()
-            conn.createStatement(
-                "CREATE TABLE MY_TABLE(ID INT, NAME VARCHAR(255));"
-            ).execute().awaitSingle()
             conn.createStatement(
                 "INSERT INTO MY_TABLE VALUES(1, 'USER1');"
             ).execute().awaitSingle()
@@ -80,13 +75,13 @@ class DatabaseModuleTest {
             val result2 = conn.createStatement(
                 "SELECT COUNT(*) FROM MY_TABLE;"
             ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
-            assertEquals(2, result2 as Long)
+            assertEquals(3, result2 as Long)
 
             // We create a second conn and this db still exists?
             val conn2 = client.connectionFactory.create().awaitSingle()
             val result3 = conn2.createStatement(
                 "SELECT COUNT(*) FROM MY_TABLE;"
             ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
-            assertEquals(2, result3 as Long)
+            assertEquals(3, result3 as Long)
         }
 }

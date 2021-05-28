@@ -36,7 +36,9 @@ class DatabaseModule : AbstractModule() {
             val dbConf = it.value
             val cfo = ConnectionFactoryOptions.builder().apply {
                 this.option(ConnectionFactoryOptions.DRIVER, dbConf.driver)
-                this.option(ConnectionFactoryOptions.PROTOCOL, dbConf.protocol)
+                if (dbConf.protocol.isNotBlank()) {
+                    this.option(ConnectionFactoryOptions.PROTOCOL, dbConf.protocol)
+                }
                 this.option(ConnectionFactoryOptions.DATABASE, dbConf.database)
                 if (dbConf.hostname.isNotBlank()) {
                     this.option(ConnectionFactoryOptions.HOST, dbConf.hostname)
