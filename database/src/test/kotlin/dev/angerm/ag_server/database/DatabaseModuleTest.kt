@@ -4,8 +4,6 @@ import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.App
 import kotlinx.coroutines.reactive.awaitSingle
-import org.springframework.r2dbc.core.await
-import org.springframework.r2dbc.core.awaitOneOrNull
 import org.springframework.r2dbc.core.awaitSingle
 import kotlin.test.Test
 import kotlin.test.assertEquals
