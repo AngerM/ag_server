@@ -16,10 +16,7 @@ class GrpcModuleTest {
             "gproto+http://localhost:${server.port()}",
             HealthGrpc.HealthBlockingStub::class.java
         )
-        val healthy = client.check(
-            HealthCheckRequest.newBuilder().apply {
-            }.build()
-        )
+        val healthy = client.check(HealthCheckRequest.getDefaultInstance())
         assertEquals(HealthCheckResponse.ServingStatus.SERVING, healthy.status)
     }
 
@@ -28,10 +25,7 @@ class GrpcModuleTest {
             "gproto+http://localhost:${server.port()}",
             HealthGrpc.HealthFutureStub::class.java
         )
-        val healthy = client.check(
-            HealthCheckRequest.newBuilder().apply {
-            }.build()
-        )
+        val healthy = client.check(HealthCheckRequest.getDefaultInstance())
             .toCompletableFuture()
             .await()
         assertEquals(HealthCheckResponse.ServingStatus.SERVING, healthy.status)
