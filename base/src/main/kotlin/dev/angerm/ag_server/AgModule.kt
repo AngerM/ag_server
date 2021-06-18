@@ -9,6 +9,7 @@ import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
+import com.uchuhimo.konf.source.Source
 import com.uchuhimo.konf.source.hocon
 import com.uchuhimo.konf.source.toml
 import com.uchuhimo.konf.source.yaml
@@ -141,21 +142,28 @@ class AgModule(
     fun getConfig(
         specs: Set<ConfigSpec>,
     ): Config {
+        val combinedSource = listOf("", "${environment.serviceName}/").map {
+            prefix ->
+            listOf("base", environment.stage.envVar).map {
+                filename ->
+                Source.from.yaml.resource("${prefix}$filename.yml", true) +
+                    Source.from.json.resource("${prefix}$filename.json", true) +
+                    Source.from.toml.resource("${prefix}$filename.toml", true) +
+                    Source.from.hocon.resource("${prefix}$filename.hocon", true)
+            }
+        }.flatten().reduceRight {
+            l, r ->
+            l + r
+        }
         return Config {
             specs.forEach {
                 this.addSpec(it)
             }
-        }
-            .from.yaml.string(rawYamlConfig)
-            .from.yaml.resource("base.yml", true)
-            .from.json.resource("base.json", true)
-            .from.toml.resource("base.toml", true)
-            .from.hocon.resource("base.hocon", true)
-            .from.yaml.resource("${environment.stage.envVar}.yml", true)
-            .from.json.resource("${environment.stage.envVar}.json", true)
-            .from.toml.resource("${environment.stage.envVar}.toml", true)
-            .from.hocon.resource("${environment.stage.envVar}.hocon", true)
-            .from.systemProperties()
-            .from.env()
+        }.withSource(
+            Source.from.yaml.string(rawYamlConfig) +
+                combinedSource +
+                Source.from.systemProperties() +
+                Source.from.env()
+        )
     }
 }
