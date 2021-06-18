@@ -151,9 +151,9 @@ class AgModule(
                     Source.from.toml.resource("${prefix}$filename.toml", true) +
                     Source.from.hocon.resource("${prefix}$filename.hocon", true)
             }
-        }.flatten().reduceRight {
-            l, r ->
-            l + r
+        }.flatten().reduce {
+            sum, item ->
+            sum + item
         }
         return Config {
             specs.forEach {
