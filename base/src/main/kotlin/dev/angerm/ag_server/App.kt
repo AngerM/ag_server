@@ -171,7 +171,7 @@ class AppImpl @Inject constructor(
     }
 
     override fun getConfig(): Config {
-       return config
+        return config
     }
 }
 
