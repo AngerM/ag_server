@@ -26,6 +26,7 @@ interface App {
     fun port(): Int
     fun getInjector(): Injector?
     fun setInjector(injector: Injector)
+    fun getConfig(): Config
 
     companion object {
         fun createInjector(vararg modules: AbstractModule): Injector {
@@ -87,7 +88,7 @@ interface App {
  * @param addons other addons you would like the wrapper class to control
  */
 class AppImpl @Inject constructor(
-    config: Config,
+    private val config: Config,
     metrics: Metrics,
     builder: ServerBuilder,
     handlers: Set<HttpHandler>,
@@ -167,6 +168,10 @@ class AppImpl @Inject constructor(
 
     override fun setInjector(injector: Injector) {
         appInjector = injector
+    }
+
+    override fun getConfig(): Config {
+       return config
     }
 }
 
