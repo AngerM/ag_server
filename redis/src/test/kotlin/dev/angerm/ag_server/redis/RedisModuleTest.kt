@@ -22,7 +22,7 @@ class RedisModuleTest {
             val container = server.getInjector()?.getInstance(RedisContainer::class.java)
             val client = container?.redisClients?.get("default")
             assertNotNull(client)
-            val ping = client?.ping()?.await()
+            val ping = client.ping().await()
             assertEquals("PONG", ping)
         } finally {
             redis.stop()
