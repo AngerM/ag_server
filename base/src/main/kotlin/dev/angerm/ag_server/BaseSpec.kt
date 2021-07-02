@@ -17,4 +17,6 @@ object BaseSpec : ConfigSpec() {
     val shutdownTimeoutSeconds by optional(20L)
     val http1MaxHeaderSize by optional(8192)
     val http2MaxHeaderListSize by optional(8192L)
+    val fastOpen by optional(true)
+    val noDelay by optional(true)
 }

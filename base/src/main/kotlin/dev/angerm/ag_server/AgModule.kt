@@ -100,32 +100,34 @@ class AgModule(
     @Inject
     @Singleton
     fun getBuilder(
-        conf: Config
+        config: Config
     ): ServerBuilder {
         val sb = Server.builder()
         if (!autoPort) {
-            sb.port(conf[BaseSpec.port], SessionProtocol.HTTP)
+            sb.port(config[BaseSpec.port], SessionProtocol.HTTP)
         } else {
             val port = ServerSocket(0)
             val localPort = port.localPort
             port.close()
             sb.port(localPort, SessionProtocol.HTTP)
         }
-        sb.workerGroup(EventLoopGroups.newEventLoopGroup(conf[BaseSpec.numWorkerThreads], "worker_", true), true)
-        sb.maxConnectionAge(Duration.ofSeconds(conf[BaseSpec.maxConnectionAgeSeconds]))
-        sb.maxNumConnections(conf[BaseSpec.maxNumConnections])
-        sb.http1MaxHeaderSize(conf[BaseSpec.http1MaxHeaderSize])
-        sb.http2MaxHeaderListSize(conf[BaseSpec.http2MaxHeaderListSize])
-        sb.blockingTaskExecutor(Executors.newScheduledThreadPool(conf[BaseSpec.blockingTaskThreadPoolSize]), true)
-        sb.requestTimeout(Duration.ofSeconds(conf[BaseSpec.requestTimeoutSeconds]))
-        sb.channelOption(ChannelOption.SO_BACKLOG, conf[BaseSpec.socketBacklog])
-        sb.channelOption(ChannelOption.SO_REUSEADDR, conf[BaseSpec.reuseAddr])
-        sb.childChannelOption(ChannelOption.SO_SNDBUF, conf[BaseSpec.sndBuf])
-        sb.childChannelOption(ChannelOption.SO_RCVBUF, conf[BaseSpec.rcvBuf])
+        sb.workerGroup(EventLoopGroups.newEventLoopGroup(config[BaseSpec.numWorkerThreads], "worker_", true), true)
+        sb.maxConnectionAge(Duration.ofSeconds(config[BaseSpec.maxConnectionAgeSeconds]))
+        sb.maxNumConnections(config[BaseSpec.maxNumConnections])
+        sb.http1MaxHeaderSize(config[BaseSpec.http1MaxHeaderSize])
+        sb.http2MaxHeaderListSize(config[BaseSpec.http2MaxHeaderListSize])
+        sb.blockingTaskExecutor(Executors.newScheduledThreadPool(config[BaseSpec.blockingTaskThreadPoolSize]), true)
+        sb.requestTimeout(Duration.ofSeconds(config[BaseSpec.requestTimeoutSeconds]))
+        sb.channelOption(ChannelOption.SO_BACKLOG, config[BaseSpec.socketBacklog])
+        sb.channelOption(ChannelOption.SO_REUSEADDR, config[BaseSpec.reuseAddr])
+        sb.childChannelOption(ChannelOption.SO_SNDBUF, config[BaseSpec.sndBuf])
+        sb.childChannelOption(ChannelOption.SO_RCVBUF, config[BaseSpec.rcvBuf])
+        sb.childChannelOption(ChannelOption.TCP_FASTOPEN_CONNECT, config[BaseSpec.fastOpen])
+        sb.childChannelOption(ChannelOption.TCP_NODELAY, config[BaseSpec.noDelay])
         if (environment.stage != Environment.Stage.Test) {
             sb.gracefulShutdownTimeout(
-                Duration.ofSeconds(conf[BaseSpec.gracefulShutdownTimeSeconds]),
-                Duration.ofSeconds(conf[BaseSpec.shutdownTimeoutSeconds]),
+                Duration.ofSeconds(config[BaseSpec.gracefulShutdownTimeSeconds]),
+                Duration.ofSeconds(config[BaseSpec.shutdownTimeoutSeconds]),
             )
         }
         return sb
