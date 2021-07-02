@@ -1,6 +1,5 @@
 package dev.angerm
 
-import com.linecorp.armeria.client.WebClient
 import com.linecorp.armeria.common.HttpHeaderNames
 import com.linecorp.armeria.common.HttpMethod
 import com.linecorp.armeria.common.HttpRequest

@@ -6,7 +6,6 @@ import com.google.inject.Inject
 import com.google.inject.Injector
 import com.linecorp.armeria.client.Clients
 import com.linecorp.armeria.client.WebClient
-import com.linecorp.armeria.common.SessionProtocol
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config

@@ -1,6 +1,5 @@
 package dev.angerm.ag_server.grpc
 
-import com.linecorp.armeria.client.Clients
 import dev.angerm.ag_server.App
 import dev.angerm.ag_server.grpc.services.toCompletableFuture
 import io.grpc.health.v1.HealthCheckRequest
