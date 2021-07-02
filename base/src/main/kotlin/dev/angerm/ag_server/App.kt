@@ -4,6 +4,9 @@ import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Inject
 import com.google.inject.Injector
+import com.linecorp.armeria.client.Clients
+import com.linecorp.armeria.client.WebClient
+import com.linecorp.armeria.common.SessionProtocol
 import com.linecorp.armeria.server.Server
 import com.linecorp.armeria.server.ServerBuilder
 import com.uchuhimo.konf.Config
@@ -27,6 +30,12 @@ interface App {
     fun getInjector(): Injector?
     fun setInjector(injector: Injector)
     fun getConfig(): Config
+    fun getLocalHostname() = "localhost:${port()}"
+    fun getHttpClient() = WebClient.of("http://${getLocalHostname()}")
+    fun <T> getGrpcClient(klass: Class<T>) = Clients.newClient(
+        "gproto+http://${getLocalHostname()}",
+        klass
+    )
 
     companion object {
         fun createInjector(vararg modules: AbstractModule): Injector {

@@ -12,19 +12,13 @@ import kotlin.test.assertEquals
 
 class GrpcModuleTest {
     @Test fun testHealth() = App.testServer(GrpcModule()) { server ->
-        val client = Clients.newClient(
-            "gproto+http://localhost:${server.port()}",
-            HealthGrpc.HealthBlockingStub::class.java
-        )
+        val client = server.getGrpcClient(HealthGrpc.HealthBlockingStub::class.java)
         val healthy = client.check(HealthCheckRequest.getDefaultInstance())
         assertEquals(HealthCheckResponse.ServingStatus.SERVING, healthy.status)
     }
 
     @Test fun testHealthFuture() = App.testServer(GrpcModule()) { server ->
-        val client = Clients.newClient(
-            "gproto+http://localhost:${server.port()}",
-            HealthGrpc.HealthFutureStub::class.java
-        )
+        val client = server.getGrpcClient(HealthGrpc.HealthFutureStub::class.java)
         val healthy = client.check(HealthCheckRequest.getDefaultInstance())
             .toCompletableFuture()
             .await()
