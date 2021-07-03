@@ -5,6 +5,7 @@ import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.google.inject.multibindings.ProvidesIntoSet
+import com.google.inject.name.Names
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import io.lettuce.core.ClientOptions
@@ -15,6 +16,7 @@ import io.lettuce.core.TimeoutOptions
 import io.lettuce.core.cluster.ClusterClientOptions
 import io.lettuce.core.cluster.ClusterTopologyRefreshOptions
 import io.lettuce.core.cluster.RedisClusterClient
+import io.lettuce.core.cluster.api.async.RedisClusterAsyncCommands
 import io.lettuce.core.metrics.CommandLatencyRecorder
 import io.lettuce.core.resource.ClientResources
 import io.prometheus.client.CollectorRegistry
@@ -88,16 +90,19 @@ class RedisModule : AbstractModule() {
                 val options = getClusterOptions(it.value)
                 val client = RedisClusterClient.create(resources, it.value.uri)
                 client.setOptions(options)
-                it.key to client.connect().apply {
+                it.key to SimpleRedis(client.connect().apply {
                     this.readFrom = ReadFrom.REPLICA_PREFERRED
-                }.async()
+                }.async())
             } else {
                 val options = getClientOptions(it.value)
                 val client = RedisClient.create(resources, it.value.uri)
                 client.options = options
-                it.key to client.connect().async()
+                it.key to SimpleRedis(client.connect().async())
             }
         }.toMap()
+        redis.forEach { (name, client) ->
+            bind(SimpleRedis::class.java).annotatedWith(Names.named(name)).toInstance(client)
+        }
         return RedisContainer(
             redis,
         )

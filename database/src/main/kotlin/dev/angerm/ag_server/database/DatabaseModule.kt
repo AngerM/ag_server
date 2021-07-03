@@ -5,6 +5,7 @@ import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.google.inject.multibindings.ProvidesIntoSet
+import com.google.inject.name.Names
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import io.r2dbc.pool.ConnectionPool
@@ -69,6 +70,9 @@ class DatabaseModule : AbstractModule() {
             val pool = ConnectionPool(poolConfiguration)
             it.key to DatabaseClient.create(pool)
         }.toMap()
+        clients.forEach { (name, client) ->
+            bind(DatabaseClient::class.java).annotatedWith(Names.named(name)).toInstance(client)
+        }
         return DbContainer(clients)
     }
 }
