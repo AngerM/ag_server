@@ -6,7 +6,7 @@ import io.lettuce.core.cluster.api.async.RedisClusterAsyncCommands
 
 data class SimpleRedis(
     val client: RedisClusterAsyncCommands<String, String>
-): RedisClusterAsyncCommands<String,String> by (client) {
+) : RedisClusterAsyncCommands<String, String> by (client) {
     fun getFullRedis(): RedisAsyncCommands<String, String>? {
         if (this.client is RedisAsyncCommands<String, String>) return this.client
         return null
@@ -17,4 +17,4 @@ data class SimpleRedis(
         return null
     }
 }
-//typealias SimpleRedis = RedisClusterAsyncCommands<String, String>
+// typealias SimpleRedis = RedisClusterAsyncCommands<String, String>

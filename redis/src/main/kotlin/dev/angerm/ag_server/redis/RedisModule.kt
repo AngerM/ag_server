@@ -16,7 +16,6 @@ import io.lettuce.core.TimeoutOptions
 import io.lettuce.core.cluster.ClusterClientOptions
 import io.lettuce.core.cluster.ClusterTopologyRefreshOptions
 import io.lettuce.core.cluster.RedisClusterClient
-import io.lettuce.core.cluster.api.async.RedisClusterAsyncCommands
 import io.lettuce.core.metrics.CommandLatencyRecorder
 import io.lettuce.core.resource.ClientResources
 import io.prometheus.client.CollectorRegistry
@@ -90,9 +89,11 @@ class RedisModule : AbstractModule() {
                 val options = getClusterOptions(it.value)
                 val client = RedisClusterClient.create(resources, it.value.uri)
                 client.setOptions(options)
-                it.key to SimpleRedis(client.connect().apply {
-                    this.readFrom = ReadFrom.REPLICA_PREFERRED
-                }.async())
+                it.key to SimpleRedis(
+                    client.connect().apply {
+                        this.readFrom = ReadFrom.REPLICA_PREFERRED
+                    }.async()
+                )
             } else {
                 val options = getClientOptions(it.value)
                 val client = RedisClient.create(resources, it.value.uri)
