@@ -17,4 +17,3 @@ data class SimpleRedis(
         return null
     }
 }
-// typealias SimpleRedis = RedisClusterAsyncCommands<String, String>
