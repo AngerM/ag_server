@@ -30,7 +30,7 @@ allprojects {
           'kotlinx-coroutines-jdk8',
           'kotlinx-coroutines-slf4j',
         ].each {
-            api "org.jetbrains.kotlinx:${it}:1.5.0"
+            api "org.jetbrains.kotlinx:${it}:1.5.1"
         }
 
 
