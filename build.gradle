@@ -25,6 +25,7 @@ allprojects {
     dependencies {
         implementation platform('org.jetbrains.kotlin:kotlin-bom')
         api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+        api 'org.jetbrains.kotlin:kotlin-reflect'
         [ 'kotlinx-coroutines-core',
           'kotlinx-coroutines-reactor',
           'kotlinx-coroutines-jdk8',
