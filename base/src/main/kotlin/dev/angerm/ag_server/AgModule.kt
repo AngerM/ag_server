@@ -166,6 +166,6 @@ class AgModule(
                 combinedSource +
                 Source.from.systemProperties() +
                 Source.from.env()
-        )
+        ).validateRequired()
     }
 }
