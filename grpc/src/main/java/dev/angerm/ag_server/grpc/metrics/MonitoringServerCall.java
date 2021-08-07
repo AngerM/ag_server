@@ -1,6 +1,6 @@
 // Copyright 2016 Dino Wernli. All Rights Reserved. See LICENSE for licensing terms.
 
-package me.dinowernli.grpc.prometheus;
+package dev.angerm.ag_server.grpc.metrics;
 
 import java.time.Clock;
 import java.time.Instant;

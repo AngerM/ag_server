@@ -1,13 +1,12 @@
 // Copyright 2016 Dino Wernli. All Rights Reserved. See LICENSE for licensing terms.
 
-package me.dinowernli.grpc.prometheus;
+package dev.angerm.ag_server.grpc.metrics;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import io.grpc.MethodDescriptor;
 import io.grpc.Status.Code;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Counter;

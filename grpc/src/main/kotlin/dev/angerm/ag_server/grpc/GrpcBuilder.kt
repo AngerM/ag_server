@@ -6,14 +6,14 @@ import com.linecorp.armeria.server.ServerBuilder
 import com.linecorp.armeria.server.grpc.GrpcService
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.ArmeriaAddon
+import dev.angerm.ag_server.grpc.metrics.Configuration
+import dev.angerm.ag_server.grpc.metrics.MonitoringServerInterceptor
 import dev.angerm.ag_server.grpc.services.HealthService
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.prometheus.client.CollectorRegistry
-import me.dinowernli.grpc.prometheus.Configuration
-import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
 import java.util.concurrent.CompletableFuture
 
 class GrpcBuilder @Inject constructor(private val healthService: HealthService, conf: Config, collectorRegistry: CollectorRegistry) : ArmeriaAddon {
@@ -31,7 +31,11 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
         builder.setMaxInboundMessageSizeBytes(conf[GrpcSpec.maxInboundMessageSizeBytes])
         builder.setMaxOutboundMessageSizeBytes(conf[GrpcSpec.maxOutboundMessageSizeBytes])
         defaultInterceptors.addAll(injectedInterceptors)
-        defaultInterceptors.add(MonitoringServerInterceptor.create(Configuration.allMetrics().withCollectorRegistry(collectorRegistry)))
+        defaultInterceptors.add(
+            MonitoringServerInterceptor.create(
+                Configuration.allMetrics().withCollectorRegistry(collectorRegistry)
+            )
+        )
     }
 
     private fun build(): GrpcService {
