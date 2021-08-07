@@ -2,12 +2,6 @@ plugins {
     id 'java-library'
 }
 
-repositories {
-   maven {
-       url = "https://raw.github.com/dinowernli/maven-repos/master"
-   }
-}
-
 dependencies {
     ['grpc-services',
      'grpc-core',
@@ -26,6 +20,5 @@ dependencies {
     ].each {
         api "com.linecorp.armeria:${it}"
     }
-    api "me.dinowernli:java-grpc-prometheus:0.3.0"
 
 }
