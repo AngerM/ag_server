@@ -10,7 +10,7 @@ import io.prometheus.client.CollectorRegistry;
  */
 public class Configuration {
   private static double[] DEFAULT_LATENCY_BUCKETS =
-      new double[] {.001, .005, .01, .05, 0.075, .1, .25, .5, 1, 2, 5, 10};
+      new double[] {.001, .005, .01, 0.025, .05, 0.075, .1, .2, .3, .4, .5, .75, 1, 2, 5, 10};
 
   private final boolean isIncludeLatencyHistograms;
   private final CollectorRegistry collectorRegistry;
