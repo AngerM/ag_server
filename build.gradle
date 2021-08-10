@@ -101,7 +101,7 @@ allprojects {
                     url = 'https://github.com/AngerM/ag_server'
                     licenses {
                         license {
-                            name = 'MIT License'
+                            name = 'APACHE LICENSE, VERSION 2.0'
                             url = 'https://github.com/AngerM/ag_server/blob/main/LICENSE'
                         }
                     }
