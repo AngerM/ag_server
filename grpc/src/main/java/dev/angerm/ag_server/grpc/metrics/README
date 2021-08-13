@@ -1,2 +1,0 @@
-Forked from https://github.com/grpc-ecosystem/java-grpc-prometheus
-Wanted to remove the Github based maven repo from my external dependencies as well as make a few changes.
