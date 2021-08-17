@@ -1,4 +1,5 @@
-# Armeria+Guice Server ![Tests](https://github.com/AngerM/ag_server/actions/workflows/cd.yml/badge.svg) ![MavenBadge](https://maven-badges.herokuapp.com/maven-central/dev.angerm.ag_server/base/badge.svg?style=flat)
+# Armeria+Guice Server ![Tests](https://github.com/AngerM/ag_server/actions/workflows/cd.yml/badge.svg) <a href="https://search.maven.org/search?q=g:dev.angerm.ag_server"><img src="https://img.shields.io/maven-central/v/dev.angerm.ag_server/base.svg?label=version" /></a>
+
 
 This is an opinionated set of Kotlin/Java components that combine [Armeria](https://armeria.dev/), [Guice](https://github.com/google/guice) and a few other libraries and utilites in a way I think make sense.
 
