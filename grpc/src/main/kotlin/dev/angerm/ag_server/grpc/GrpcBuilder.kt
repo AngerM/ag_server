@@ -23,7 +23,8 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
     private val builder = GrpcService.builder()
     @Inject(optional = true) private val bindableServices: Set<ServerServiceDefinition> = setOf()
     @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedInterceptors: Set<ServerInterceptor> = setOf()
-    private val defaultInterceptors: MutableSet<ServerInterceptor> = mutableSetOf()
+    @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedOrderedInterceptors: Set<List<ServerInterceptor>> = setOf()
+    private val defaultInterceptors: MutableList<ServerInterceptor> = mutableListOf()
 
     init {
         builder.addService(ProtoReflectionService.newInstance())
@@ -31,6 +32,11 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
         builder.setMaxInboundMessageSizeBytes(conf[GrpcSpec.maxInboundMessageSizeBytes])
         builder.setMaxOutboundMessageSizeBytes(conf[GrpcSpec.maxOutboundMessageSizeBytes])
         defaultInterceptors.addAll(injectedInterceptors)
+        injectedOrderedInterceptors.forEach { orderedList ->
+            // reverse the list to make it 'easier' for our users since the last interceptor is called first
+           defaultInterceptors.addAll(orderedList.reversed())
+        }
+        // the last interceptor so it is called first
         defaultInterceptors.add(
             MonitoringServerInterceptor.create(
                 Configuration.allMetrics().withCollectorRegistry(collectorRegistry)
