@@ -34,7 +34,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
         defaultInterceptors.addAll(injectedInterceptors)
         injectedOrderedInterceptors.forEach { orderedList ->
             // reverse the list to make it 'easier' for our users since the last interceptor is called first
-           defaultInterceptors.addAll(orderedList.reversed())
+            defaultInterceptors.addAll(orderedList.reversed())
         }
         // the last interceptor so it is called first
         defaultInterceptors.add(
