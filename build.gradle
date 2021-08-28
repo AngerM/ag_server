@@ -35,7 +35,7 @@ allprojects {
         }
 
 
-        api platform("com.linecorp.armeria:armeria-bom:1.10.0")
+        api platform("com.linecorp.armeria:armeria-bom:1.11.0")
         ['armeria',
          'armeria-kotlin',
          'armeria-logback',
