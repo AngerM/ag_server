@@ -19,7 +19,6 @@ import dev.angerm.ag_server.http.HttpHandler
 import dev.angerm.ag_server.http.PrometheusHandler
 import io.netty.channel.ChannelOption
 import io.prometheus.client.CollectorRegistry
-import io.prometheus.client.hotspot.DefaultExports
 import java.net.ServerSocket
 import java.time.Duration
 import java.util.concurrent.Executors
@@ -40,9 +39,6 @@ class AgModule(
 ) : AbstractModule() {
 
     override fun configure() {
-        if (registry != CollectorRegistry.defaultRegistry) {
-            DefaultExports.register(registry)
-        }
         bind(CollectorRegistry::class.java).toInstance(registry)
         Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
         bind(Environment::class.java).toInstance(environment)
