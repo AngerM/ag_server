@@ -39,7 +39,10 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
         // the last interceptor so it is called first
         defaultInterceptors.add(
             MonitoringServerInterceptor.create(
-                Configuration.allMetrics().withCollectorRegistry(collectorRegistry)
+                Configuration
+                    .allMetrics()
+                    .withCollectorRegistry(collectorRegistry)
+                    .withHeadersToLog(conf[GrpcSpec.headersToLog])
             )
         )
     }

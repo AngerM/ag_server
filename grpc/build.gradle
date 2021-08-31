@@ -13,7 +13,7 @@ dependencies {
     api group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.17.3'
     api group: 'com.spotify', name: 'futures-extra', version: '4.3.0'
     api group: 'com.google.api', name: 'api-common', version: '2.0.2'
-    api group: 'dev.angerm.grpc.prometheus', name: 'java-grpc-prometheus', version: '0.1.2'
+    api group: 'dev.angerm.grpc.prometheus', name: 'java-grpc-prometheus', version: '1.0.0'
 
     implementation project(':base')
 
