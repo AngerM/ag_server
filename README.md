@@ -5,7 +5,9 @@ This is an opinionated set of Kotlin/Java components that combine [Armeria](http
 
 You can selectively use the parts you want or add in your own modules and config as desired.
 
-See the example folder for a simple example. The Dockerfile also builds the example app
+The [wiki page](https://github.com/AngerM/ag_server/wiki) has walkthroughs showing how to use the components AG Server Provides.
+
+See the example folder for a simple example. The Dockerfile within also builds the example app
 
 Available on [maven central](https://search.maven.org/search?q=g:dev.angerm.ag_server). Example:
 ```
