@@ -10,7 +10,7 @@ dependencies {
         api group: 'io.grpc', name: "$it", version: "1.40.1"
     }
     api group: 'io.grpc', name: 'grpc-kotlin-stub', version: '1.1.0', ext: 'pom'
-    api group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.17.3'
+    api group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.18.0'
     api group: 'com.spotify', name: 'futures-extra', version: '4.3.0'
     api group: 'com.google.api', name: 'api-common', version: '2.0.2'
     api group: 'dev.angerm.grpc.prometheus', name: 'java-grpc-prometheus', version: '1.0.0'
