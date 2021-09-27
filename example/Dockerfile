@@ -1,4 +1,4 @@
-FROM amazoncorretto:11 as builder
+FROM amazoncorretto:17 as builder
 
 RUN mkdir /workspace
 
@@ -12,7 +12,7 @@ COPY . /workspace
 
 RUN ./gradlew installDist --no-daemon
 
-FROM amazoncorretto:16 as runner
+FROM amazoncorretto:17 as runner
 WORKDIR /home
 COPY --from=builder /workspace/build/install .
 
