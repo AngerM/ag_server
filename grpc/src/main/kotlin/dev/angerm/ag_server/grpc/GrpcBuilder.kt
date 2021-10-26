@@ -7,13 +7,13 @@ import com.linecorp.armeria.server.grpc.GrpcService
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.ArmeriaAddon
 import dev.angerm.ag_server.grpc.services.HealthService
-import dev.angerm.grpc.prometheus.Configuration
-import dev.angerm.grpc.prometheus.MonitoringServerInterceptor
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
 import io.grpc.ServerServiceDefinition
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.prometheus.client.CollectorRegistry
+import me.dinowernli.grpc.prometheus.Configuration
+import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
 import java.util.concurrent.CompletableFuture
 
 class GrpcBuilder @Inject constructor(private val healthService: HealthService, conf: Config, collectorRegistry: CollectorRegistry) : ArmeriaAddon {
@@ -42,7 +42,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
                 Configuration
                     .allMetrics()
                     .withCollectorRegistry(collectorRegistry)
-                    .withHeadersToLog(conf[GrpcSpec.headersToLog])
+                    .withLabelHeaders(conf[GrpcSpec.headersToLog])
             )
         )
     }
