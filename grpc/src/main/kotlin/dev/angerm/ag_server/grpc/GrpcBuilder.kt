@@ -6,6 +6,7 @@ import com.linecorp.armeria.server.ServerBuilder
 import com.linecorp.armeria.server.grpc.GrpcService
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.ArmeriaAddon
+import dev.angerm.ag_server.Metrics
 import dev.angerm.ag_server.grpc.services.HealthService
 import io.grpc.ServerInterceptor
 import io.grpc.ServerInterceptors
@@ -43,6 +44,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
                     .allMetrics()
                     .withCollectorRegistry(collectorRegistry)
                     .withLabelHeaders(conf[GrpcSpec.headersToLog])
+                    .withLatencyBuckets(Metrics.buckets.toDoubleArray())
             )
         )
     }

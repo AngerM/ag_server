@@ -6,19 +6,8 @@ import io.prometheus.client.Counter
 import io.prometheus.client.Histogram
 
 class Metrics @Inject constructor(registry: CollectorRegistry) {
-    val httpCounter = Counter.Builder()
-        .name("http_request")
-        .help("http request counters")
-        .labelNames(
-            "http_method",
-            "request_path",
-            "status_code"
-        ).register(registry)
-
-    val httpLatency = Histogram.Builder()
-        .name("http_latency")
-        .help("http request latency in seconds")
-        .buckets(
+    companion object {
+        val buckets = arrayOf(
             0.001,
             0.005,
             0.010,
@@ -40,8 +29,22 @@ class Metrics @Inject constructor(registry: CollectorRegistry) {
             10.0,
             20.0,
             30.0,
-            60.0
+            60.0,
         )
+    }
+    val httpCounter = Counter.Builder()
+        .name("http_request")
+        .help("http request counters")
+        .labelNames(
+            "http_method",
+            "request_path",
+            "status_code"
+        ).register(registry)
+
+    val httpLatency = Histogram.Builder()
+        .name("http_latency")
+        .help("http request latency in seconds")
+        .buckets(*buckets.toDoubleArray())
         .labelNames(
             "http_method",
             "request_path",
