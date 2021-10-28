@@ -44,7 +44,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
                     .allMetrics()
                     .withCollectorRegistry(collectorRegistry)
                     .withLabelHeaders(conf[GrpcSpec.headersToLog])
-                    .withLatencyBuckets(Metrics.buckets.toDoubleArray())
+                    .withLatencyBuckets(Metrics.buckets)
             )
         )
     }

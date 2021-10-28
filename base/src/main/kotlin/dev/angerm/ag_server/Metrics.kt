@@ -30,7 +30,7 @@ class Metrics @Inject constructor(registry: CollectorRegistry) {
             20.0,
             30.0,
             60.0,
-        )
+        ).toDoubleArray()
     }
     val httpCounter = Counter.Builder()
         .name("http_request")
@@ -44,7 +44,7 @@ class Metrics @Inject constructor(registry: CollectorRegistry) {
     val httpLatency = Histogram.Builder()
         .name("http_latency")
         .help("http request latency in seconds")
-        .buckets(*buckets.toDoubleArray())
+        .buckets(*buckets)
         .labelNames(
             "http_method",
             "request_path",
