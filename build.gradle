@@ -21,7 +21,7 @@ allprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
     group = 'dev.angerm.ag_server'
-    version= "0.1.11"
+    version= "0.1.12-SNAPSHOT"
 
     dependencies {
         implementation platform('org.jetbrains.kotlin:kotlin-bom')
