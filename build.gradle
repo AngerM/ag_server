@@ -45,7 +45,7 @@ allprojects {
         ].each {
             api "com.linecorp.armeria:${it}"
         }
-        api 'io.github.microutils:kotlin-logging-jvm:2.1.15'
+        api 'io.github.microutils:kotlin-logging-jvm:2.1.16'
         api 'com.uchuhimo:konf:1.1.2'
 
         ['simpleclient',
