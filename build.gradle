@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id "org.jetbrains.dokka" version "1.6.0"
     id "org.jmailen.kotlinter" version "3.7.0"
     id "com.github.ben-manes.versions" version "0.39.0"
@@ -45,14 +45,14 @@ allprojects {
         ].each {
             api "com.linecorp.armeria:${it}"
         }
-        api 'io.github.microutils:kotlin-logging-jvm:2.1.16'
+        api 'io.github.microutils:kotlin-logging-jvm:2.1.21'
         api 'com.uchuhimo:konf:1.1.2'
 
         ['simpleclient',
          'simpleclient_hotspot',
          'simpleclient_httpserver',
         ].each {
-            api "io.prometheus:${it}:0.12.0"
+            api "io.prometheus:${it}:0.14.1"
         }
 
         api "com.google.inject:guice:5.0.1"
