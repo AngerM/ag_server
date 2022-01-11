@@ -21,7 +21,7 @@ allprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
     group = 'dev.angerm.ag_server'
-    version= "0.1.12-SNAPSHOT"
+    version= "0.1.12"
 
     dependencies {
         implementation platform('org.jetbrains.kotlin:kotlin-bom')
@@ -39,7 +39,6 @@ allprojects {
         api platform("com.linecorp.armeria:armeria-bom:1.13.4")
         ['armeria',
          'armeria-kotlin',
-         'armeria-logback',
          'armeria-retrofit2',
          'armeria-rxjava3',
         ].each {
