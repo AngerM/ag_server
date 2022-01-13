@@ -65,6 +65,10 @@ class ExampleModule : AbstractModule() {
 }
 
 fun main() {
+    System.setProperty(
+        "javax.xml.parsers.SAXParserFactory",
+        "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"
+    )
     val injector = App.createInjector(
         GrpcModule(),
         RedisModule(),
