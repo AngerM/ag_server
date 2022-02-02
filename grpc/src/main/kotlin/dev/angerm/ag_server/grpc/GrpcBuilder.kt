@@ -30,8 +30,8 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
     init {
         builder.addService(ProtoReflectionService.newInstance())
         builder.addService(healthService.bindService())
-        builder.setMaxInboundMessageSizeBytes(conf[GrpcSpec.maxInboundMessageSizeBytes])
-        builder.setMaxOutboundMessageSizeBytes(conf[GrpcSpec.maxOutboundMessageSizeBytes])
+        builder.maxRequestMessageLength(conf[GrpcSpec.maxInboundMessageSizeBytes])
+        builder.maxResponseMessageLength(conf[GrpcSpec.maxOutboundMessageSizeBytes])
         defaultInterceptors.addAll(injectedInterceptors)
         injectedOrderedInterceptors.forEach { orderedList ->
             // reverse the list to make it 'easier' for our users since the last interceptor is called first
