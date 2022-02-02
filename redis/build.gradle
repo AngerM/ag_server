@@ -1,5 +1,5 @@
 dependencies {
     implementation project(':base')
-    api group: 'io.lettuce', name: 'lettuce-core', version: '6.1.5.RELEASE'
+    api group: 'io.lettuce', name: 'lettuce-core', version: '6.1.6.RELEASE'
     testImplementation  group: 'it.ozimov', name: 'embedded-redis', version: '0.7.3'
 }

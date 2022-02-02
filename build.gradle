@@ -36,7 +36,7 @@ allprojects {
         }
 
 
-        api platform("com.linecorp.armeria:armeria-bom:1.13.4")
+        api platform("com.linecorp.armeria:armeria-bom:1.14.0")
         ['armeria',
          'armeria-kotlin',
          'armeria-retrofit2',
@@ -54,7 +54,7 @@ allprojects {
             api "io.prometheus:${it}:0.14.1"
         }
 
-        api "com.google.inject:guice:5.0.1"
+        api "com.google.inject:guice:5.1.0"
 
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation(platform('org.junit:junit-bom:5.8.2'))
