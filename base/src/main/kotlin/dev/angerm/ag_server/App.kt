@@ -111,7 +111,7 @@ class AppImpl @Inject constructor(
     init {
         logger.info("App creation started")
         decorators.decorators.forEach {
-            orderedDecoratorList ->
+                orderedDecoratorList ->
             // Decorators are run in reverse order
             orderedDecoratorList.reversed().forEach {
                 builder.decorator(it.forRoute(), it)

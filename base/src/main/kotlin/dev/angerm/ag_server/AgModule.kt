@@ -141,16 +141,16 @@ class AgModule(
         specs: Set<ConfigSpec>,
     ): Config {
         val combinedSource = listOf("", "${environment.serviceName}/").map {
-            prefix ->
+                prefix ->
             listOf("base", environment.stage.envVar).map {
-                filename ->
+                    filename ->
                 Source.from.yaml.resource("${prefix}$filename.yml", true) +
                     Source.from.json.resource("${prefix}$filename.json", true) +
                     Source.from.toml.resource("${prefix}$filename.toml", true) +
                     Source.from.hocon.resource("${prefix}$filename.hocon", true)
             }
         }.flatten().reduce {
-            sum, item ->
+                sum, item ->
             sum + item
         }
         return Config {
