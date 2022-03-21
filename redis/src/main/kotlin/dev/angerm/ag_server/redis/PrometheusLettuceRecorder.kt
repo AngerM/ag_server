@@ -6,7 +6,6 @@ import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.Histogram
 import java.net.SocketAddress
 
-
 class PrometheusLettuceRecorder(private val cluster: String, private val metrics: Metrics) : CommandLatencyRecorder {
     class Metrics(registry: CollectorRegistry) {
         val firstLatency = Histogram.build("lettuce_command_first_response_latency", "latency metrics for lettuce commands in nanoseconds")

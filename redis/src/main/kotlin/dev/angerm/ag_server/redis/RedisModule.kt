@@ -15,7 +15,6 @@ import io.lettuce.core.TimeoutOptions
 import io.lettuce.core.cluster.ClusterClientOptions
 import io.lettuce.core.cluster.ClusterTopologyRefreshOptions
 import io.lettuce.core.cluster.RedisClusterClient
-import io.lettuce.core.metrics.CommandLatencyRecorder
 import io.lettuce.core.resource.ClientResources
 import io.prometheus.client.CollectorRegistry
 import java.time.Duration
