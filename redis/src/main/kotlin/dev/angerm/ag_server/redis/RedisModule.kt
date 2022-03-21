@@ -30,14 +30,6 @@ class RedisModule : AbstractModule() {
         return RedisSpec
     }
 
-    @Provides
-    @Singleton
-    fun getCommandLatencyRecorder(
-        collectorRegistry: CollectorRegistry
-    ): CommandLatencyRecorder {
-        return PrometheusLettuceRecorder(collectorRegistry)
-    }
-
     private fun getClientOptions(conf: RedisSpec.RedisConfig): ClientOptions {
         val socketOptions = SocketOptions.builder()
             .connectTimeout(Duration.ofMillis(conf.connectTimeoutMillis))
@@ -74,12 +66,20 @@ class RedisModule : AbstractModule() {
     @Provides
     @Inject
     @Singleton
+    fun getRedisPromMetrics(
+        collectorRegistry: CollectorRegistry
+    ) = PrometheusLettuceRecorder.Metrics(collectorRegistry)
+
+    @Provides
+    @Inject
+    @Singleton
     fun getRedis(
-        recorder: CommandLatencyRecorder,
-        conf: Config
+        conf: Config,
+        metrics: PrometheusLettuceRecorder.Metrics,
     ): RedisContainer {
         val redisConfigs = conf[RedisSpec.redis]
         val redis = redisConfigs.map {
+            val recorder = PrometheusLettuceRecorder(it.key, metrics)
             val resources = ClientResources.builder()
                 .apply {
                     this.commandLatencyRecorder(recorder)

@@ -6,20 +6,23 @@ import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.Histogram
 import java.net.SocketAddress
 
-class PrometheusLettuceRecorder(registry: CollectorRegistry) : CommandLatencyRecorder {
-    private val firstLatency = Histogram.build("lettuce_command_first_response_latency", "latency metrics for lettuce commands in nanoseconds")
-        .exponentialBuckets(100_000.0, 2.0, 16)
-        .labelNames(
-            "remote",
-            "command",
-        ).register(registry)
 
-    private val completionLatency = Histogram.build("lettuce_command_latency", "latency metrics for lettuce commands in nanoseconds")
-        .exponentialBuckets(100_000.0, 2.0, 16)
-        .labelNames(
-            "remote",
-            "command",
-        ).register(registry)
+class PrometheusLettuceRecorder(private val cluster: String, private val metrics: Metrics) : CommandLatencyRecorder {
+    class Metrics(registry: CollectorRegistry) {
+        val firstLatency = Histogram.build("lettuce_command_first_response_latency", "latency metrics for lettuce commands in nanoseconds")
+            .exponentialBuckets(100_000.0, 2.0, 16)
+            .labelNames(
+                "cluster",
+                "command",
+            ).register(registry)
+
+        val completionLatency = Histogram.build("lettuce_command_latency", "latency metrics for lettuce commands in nanoseconds")
+            .exponentialBuckets(100_000.0, 2.0, 16)
+            .labelNames(
+                "cluster",
+                "command",
+            ).register(registry)
+    }
 
     override fun recordCommandLatency(
         local: SocketAddress?,
@@ -28,13 +31,13 @@ class PrometheusLettuceRecorder(registry: CollectorRegistry) : CommandLatencyRec
         firstResponseLatency: Long,
         completionLatency: Long
     ) {
-        this.firstLatency.labels(
-            remote?.toString() ?: "UNKNOWN",
+        metrics.firstLatency.labels(
+            cluster,
             commandType?.name() ?: "UNKNOWN"
         ).observe(firstResponseLatency.toDouble())
 
-        this.completionLatency.labels(
-            remote?.toString() ?: "UNKNOWN",
+        metrics.completionLatency.labels(
+            cluster,
             commandType?.name() ?: "UNKNOWN"
         ).observe(completionLatency.toDouble())
     }
