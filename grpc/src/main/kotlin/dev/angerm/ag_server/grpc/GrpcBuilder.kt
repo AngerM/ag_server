@@ -32,6 +32,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
         builder.addService(healthService.bindService())
         builder.maxRequestMessageLength(conf[GrpcSpec.maxInboundMessageSizeBytes])
         builder.maxResponseMessageLength(conf[GrpcSpec.maxOutboundMessageSizeBytes])
+        builder.enableHttpJsonTranscoding(conf[GrpcSpec.enableHttpJsonEncoding])
         defaultInterceptors.addAll(injectedInterceptors)
         injectedOrderedInterceptors.forEach { orderedList ->
             // reverse the list to make it 'easier' for our users since the last interceptor is called first
