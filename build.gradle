@@ -1,7 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
-    id "org.jetbrains.dokka" version "1.6.10"
-    id "org.jmailen.kotlinter" version "3.9.0"
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+    id "org.jetbrains.dokka" version "1.6.21"
+    id "org.jmailen.kotlinter" version "3.10.0"
     id "com.github.ben-manes.versions" version "0.42.0"
     id 'maven-publish'
 }
@@ -32,11 +32,11 @@ allprojects {
           'kotlinx-coroutines-jdk8',
           'kotlinx-coroutines-slf4j',
         ].each {
-            api "org.jetbrains.kotlinx:${it}:1.6.0"
+            api "org.jetbrains.kotlinx:${it}:1.6.1"
         }
 
 
-        api platform("com.linecorp.armeria:armeria-bom:1.15.0")
+        api platform("com.linecorp.armeria:armeria-bom:1.16.0")
         ['armeria',
          'armeria-kotlin',
          'armeria-retrofit2',
@@ -60,7 +60,7 @@ allprojects {
         testImplementation(platform('org.junit:junit-bom:5.8.2'))
         testImplementation('org.junit.jupiter:junit-jupiter')
 
-        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10"
+        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.6.21"
     }
 
     tasks.withType(JavaCompile) {
