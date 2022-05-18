@@ -19,7 +19,6 @@ import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
 import java.util.concurrent.CompletableFuture
 
 class GrpcBuilder @Inject constructor(
-    private val healthService: HealthService,
     private val config: Config,
     collectorRegistry: CollectorRegistry,
 ) : ArmeriaAddon {
@@ -34,6 +33,8 @@ class GrpcBuilder @Inject constructor(
     @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedInterceptors: Set<ServerInterceptor> = setOf()
     @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedOrderedInterceptors: Set<List<ServerInterceptor>> = setOf()
     @Inject(optional = true) private val modifyGrpcBuilder: Modifier? = null
+    @Inject(optional = true) private val injectedHealthService: HealthService? = null
+    private val healthService: HealthService = injectedHealthService ?: HealthService()
     private val defaultInterceptors: MutableList<ServerInterceptor> = mutableListOf()
 
     init {

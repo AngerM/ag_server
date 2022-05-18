@@ -7,13 +7,7 @@ import com.uchuhimo.konf.ConfigSpec
 import dev.angerm.ag_server.ArmeriaAddon
 import dev.angerm.ag_server.grpc.services.HealthService
 
-class GrpcModule(
-    private val healthService: HealthService = HealthService(),
-) : AbstractModule() {
-    override fun configure() {
-        bind(HealthService::class.java).toInstance(healthService)
-    }
-
+class GrpcModule: AbstractModule() {
     @ProvidesIntoSet
     fun getConf(): ConfigSpec {
         return GrpcSpec
