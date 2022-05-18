@@ -29,6 +29,7 @@ import java.util.concurrent.Executors
  * @param defaultHandler the default handler
  * @param registry the collector registry, defaults to the prometheus defaultRegistry
  * @param autoPort tells AgModule to ignore the config and bind to any available port
+ * @param modifyServer lets you run custom code to modify the server builder
  */
 class AgModule(
     private val environment: Environment,
@@ -36,6 +37,7 @@ class AgModule(
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
     private val rawYamlConfig: String = "",
+    private val modifyServer: (sb: ServerBuilder, config: Config) -> Unit = { _: ServerBuilder, _: Config -> },
 ) : AbstractModule() {
 
     override fun configure() {
@@ -110,6 +112,9 @@ class AgModule(
         sb.workerGroup(EventLoopGroups.newEventLoopGroup(config[BaseSpec.numWorkerThreads], "worker_", true), true)
         sb.maxConnectionAge(Duration.ofSeconds(config[BaseSpec.maxConnectionAgeSeconds]))
         sb.maxNumConnections(config[BaseSpec.maxNumConnections])
+        config[BaseSpec.maxRequestLength]?.let {
+            sb.maxRequestLength(it)
+        }
         sb.http1MaxHeaderSize(config[BaseSpec.http1MaxHeaderSize])
         sb.http2MaxHeaderListSize(config[BaseSpec.http2MaxHeaderListSize])
         sb.blockingTaskExecutor(Executors.newScheduledThreadPool(config[BaseSpec.blockingTaskThreadPoolSize]), true)
@@ -126,6 +131,7 @@ class AgModule(
                 Duration.ofSeconds(config[BaseSpec.shutdownTimeoutSeconds]),
             )
         }
+        modifyServer(sb, config)
         return sb
     }
 

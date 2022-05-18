@@ -7,6 +7,7 @@ object BaseSpec : ConfigSpec() {
     val numWorkerThreads by optional(64)
     val maxConnectionAgeSeconds by optional(300L)
     val maxNumConnections by optional(Integer.MAX_VALUE)
+    val maxRequestLength by optional<Long?>(null)
     val blockingTaskThreadPoolSize by optional(64)
     val requestTimeoutSeconds by optional(10L)
     val socketBacklog by optional(256)

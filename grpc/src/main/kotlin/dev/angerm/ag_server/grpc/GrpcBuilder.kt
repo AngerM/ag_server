@@ -4,6 +4,7 @@ import com.google.inject.Inject
 import com.google.inject.name.Named
 import com.linecorp.armeria.server.ServerBuilder
 import com.linecorp.armeria.server.grpc.GrpcService
+import com.linecorp.armeria.server.grpc.GrpcServiceBuilder
 import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.ArmeriaAddon
 import dev.angerm.ag_server.Metrics
@@ -17,7 +18,14 @@ import me.dinowernli.grpc.prometheus.Configuration
 import me.dinowernli.grpc.prometheus.MonitoringServerInterceptor
 import java.util.concurrent.CompletableFuture
 
-class GrpcBuilder @Inject constructor(private val healthService: HealthService, conf: Config, collectorRegistry: CollectorRegistry) : ArmeriaAddon {
+class GrpcBuilder @Inject constructor(
+    private val healthService: HealthService,
+    private val config: Config,
+    collectorRegistry: CollectorRegistry,
+) : ArmeriaAddon {
+    interface Modifier {
+        fun modify(builder: GrpcServiceBuilder, config: Config) {}
+    }
     companion object {
         const val GLOBAL_INTERCEPTORS = "Global"
     }
@@ -25,14 +33,15 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
     @Inject(optional = true) private val bindableServices: Set<ServerServiceDefinition> = setOf()
     @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedInterceptors: Set<ServerInterceptor> = setOf()
     @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedOrderedInterceptors: Set<List<ServerInterceptor>> = setOf()
+    @Inject(optional = true) private val modifyGrpcBuilder: Modifier? = null
     private val defaultInterceptors: MutableList<ServerInterceptor> = mutableListOf()
 
     init {
         builder.addService(ProtoReflectionService.newInstance())
         builder.addService(healthService.bindService())
-        builder.maxRequestMessageLength(conf[GrpcSpec.maxInboundMessageSizeBytes])
-        builder.maxResponseMessageLength(conf[GrpcSpec.maxOutboundMessageSizeBytes])
-        builder.enableHttpJsonTranscoding(conf[GrpcSpec.enableHttpJsonEncoding])
+        builder.maxRequestMessageLength(config[GrpcSpec.maxInboundMessageSizeBytes])
+        builder.maxResponseMessageLength(config[GrpcSpec.maxOutboundMessageSizeBytes])
+        builder.enableHttpJsonTranscoding(config[GrpcSpec.enableHttpJsonEncoding])
         defaultInterceptors.addAll(injectedInterceptors)
         injectedOrderedInterceptors.forEach { orderedList ->
             // reverse the list to make it 'easier' for our users since the last interceptor is called first
@@ -44,7 +53,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
                 Configuration
                     .allMetrics()
                     .withCollectorRegistry(collectorRegistry)
-                    .withLabelHeaders(conf[GrpcSpec.headersToLog])
+                    .withLabelHeaders(config[GrpcSpec.headersToLog])
                     .withLatencyBuckets(Metrics.buckets)
             )
         )
@@ -56,6 +65,7 @@ class GrpcBuilder @Inject constructor(private val healthService: HealthService, 
                 ServerInterceptors.intercept(it, defaultInterceptors.toList())
             )
         }
+        modifyGrpcBuilder?.modify(builder, config)
         return builder.build()
     }
 
