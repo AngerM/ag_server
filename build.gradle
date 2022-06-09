@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.0'
     id "org.jetbrains.dokka" version "1.6.21"
     id "org.jmailen.kotlinter" version "3.10.0"
     id "com.github.ben-manes.versions" version "0.42.0"
@@ -32,7 +32,7 @@ allprojects {
           'kotlinx-coroutines-jdk8',
           'kotlinx-coroutines-slf4j',
         ].each {
-            api "org.jetbrains.kotlinx:${it}:1.6.1"
+            api "org.jetbrains.kotlinx:${it}:1.6.2"
         }
 
 
@@ -44,7 +44,7 @@ allprojects {
         ].each {
             api "com.linecorp.armeria:${it}"
         }
-        api 'io.github.microutils:kotlin-logging-jvm:2.1.21'
+        api 'io.github.microutils:kotlin-logging-jvm:2.1.23'
         api 'com.uchuhimo:konf:1.1.2'
 
         ['simpleclient',
