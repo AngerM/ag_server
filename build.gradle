@@ -1,6 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.7.0'
-    id "org.jetbrains.dokka" version "1.6.21"
+    id "org.jetbrains.dokka" version "1.7.0"
     id "org.jmailen.kotlinter" version "3.10.0"
     id "com.github.ben-manes.versions" version "0.42.0"
     id 'maven-publish'
@@ -32,7 +32,7 @@ allprojects {
           'kotlinx-coroutines-jdk8',
           'kotlinx-coroutines-slf4j',
         ].each {
-            api "org.jetbrains.kotlinx:${it}:1.6.2"
+            api "org.jetbrains.kotlinx:${it}:1.6.3"
         }
 
 
@@ -51,7 +51,7 @@ allprojects {
          'simpleclient_hotspot',
          'simpleclient_httpserver',
         ].each {
-            api "io.prometheus:${it}:0.15.0"
+            api "io.prometheus:${it}:0.16.0"
         }
 
         api "com.google.inject:guice:5.1.0"
@@ -60,7 +60,7 @@ allprojects {
         testImplementation(platform('org.junit:junit-bom:5.8.2'))
         testImplementation('org.junit.jupiter:junit-jupiter')
 
-        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.6.21"
+        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.7.0"
     }
 
     tasks.withType(JavaCompile) {
