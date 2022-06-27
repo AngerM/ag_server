@@ -20,7 +20,7 @@ import io.prometheus.client.CollectorRegistry
 import java.time.Duration
 
 data class RedisContainer(
-    val redisClients: Map<String, SimpleRedis>,
+    val redisClients: Map<String, SimpleRedis>
 )
 
 class RedisModule : AbstractModule() {
@@ -74,7 +74,7 @@ class RedisModule : AbstractModule() {
     @Singleton
     fun getRedis(
         conf: Config,
-        metrics: PrometheusLettuceRecorder.Metrics,
+        metrics: PrometheusLettuceRecorder.Metrics
     ): RedisContainer {
         val redisConfigs = conf[RedisSpec.redis]
         val redis = redisConfigs.map {
@@ -98,7 +98,7 @@ class RedisModule : AbstractModule() {
             }
         }.toMap()
         return RedisContainer(
-            redis,
+            redis
         )
     }
 }

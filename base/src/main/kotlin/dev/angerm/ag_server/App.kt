@@ -42,9 +42,10 @@ interface App {
             return Guice.createInjector(
                 env.getGuiceStage(),
                 AgModule(env),
-                *modules,
+                *modules
             )
         }
+
         /**
          * Convenience method to get an App instance from the injector
          * @param injector a Guice injector that has had AgModule added to it
@@ -72,7 +73,7 @@ interface App {
             val injector = Guice.createInjector(
                 env.getGuiceStage(),
                 AgModule(env, registry = CollectorRegistry(), autoPort = true, rawYamlConfig = rawYamlConfig),
-                *modules,
+                *modules
             )
             val server = getServer(injector)
             server.start()
@@ -101,7 +102,7 @@ class AppImpl @Inject constructor(
     builder: ServerBuilder,
     handlers: Set<HttpHandler>,
     decorators: AgModule.HttpDecorators,
-    private val addons: AgModule.ArmeriaAddons,
+    private val addons: AgModule.ArmeriaAddons
 ) : App {
     private val shutdownTimeoutSeconds: Long = config[BaseSpec.shutdownTimeoutSeconds]
     private val server: Server

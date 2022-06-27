@@ -29,7 +29,7 @@ class DatabaseModule : AbstractModule() {
     @Inject
     @Singleton
     fun getDbs(
-        conf: Config,
+        conf: Config
     ): DbContainer {
         val dbConfigs = conf[DatabaseSpec.database]
         val clients = dbConfigs.map {

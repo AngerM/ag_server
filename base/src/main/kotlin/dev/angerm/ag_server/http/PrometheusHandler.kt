@@ -56,7 +56,7 @@ class PrometheusHandler(private val registry: CollectorRegistry) : HttpHandler {
         return HttpResponse.of(
             HttpStatus.OK,
             MediaType.parse(format),
-            writer.toString(),
+            writer.toString()
         )
     }
 }

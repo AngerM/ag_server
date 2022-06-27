@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture
 
 class GrpcBuilder @Inject constructor(
     private val config: Config,
-    collectorRegistry: CollectorRegistry,
+    collectorRegistry: CollectorRegistry
 ) : ArmeriaAddon {
     interface Modifier {
         fun modify(builder: GrpcServiceBuilder, config: Config) {}
@@ -29,11 +29,23 @@ class GrpcBuilder @Inject constructor(
         const val GLOBAL_INTERCEPTORS = "Global"
     }
     private val builder = GrpcService.builder()
-    @Inject(optional = true) private val bindableServices: Set<ServerServiceDefinition> = setOf()
-    @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedInterceptors: Set<ServerInterceptor> = setOf()
-    @Inject(optional = true) @Named(GLOBAL_INTERCEPTORS) private val injectedOrderedInterceptors: Set<List<ServerInterceptor>> = setOf()
-    @Inject(optional = true) private val modifyGrpcBuilder: Modifier? = null
-    @Inject(optional = true) private val injectedHealthService: HealthService? = null
+
+    @Inject(optional = true)
+    private val bindableServices: Set<ServerServiceDefinition> = setOf()
+
+    @Inject(optional = true)
+    @Named(GLOBAL_INTERCEPTORS)
+    private val injectedInterceptors: Set<ServerInterceptor> = setOf()
+
+    @Inject(optional = true)
+    @Named(GLOBAL_INTERCEPTORS)
+    private val injectedOrderedInterceptors: Set<List<ServerInterceptor>> = setOf()
+
+    @Inject(optional = true)
+    private val modifyGrpcBuilder: Modifier? = null
+
+    @Inject(optional = true)
+    private val injectedHealthService: HealthService? = null
     private val healthService: HealthService = injectedHealthService ?: HealthService()
     private val defaultInterceptors: MutableList<ServerInterceptor> = mutableListOf()
 

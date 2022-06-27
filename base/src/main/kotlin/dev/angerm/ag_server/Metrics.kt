@@ -29,7 +29,7 @@ class Metrics @Inject constructor(registry: CollectorRegistry) {
             10.0,
             20.0,
             30.0,
-            60.0,
+            60.0
         ).toDoubleArray()
     }
     val httpCounter = Counter.Builder()

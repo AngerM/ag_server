@@ -12,14 +12,14 @@ class PrometheusLettuceRecorder(private val cluster: String, private val metrics
             .exponentialBuckets(100_000.0, 2.0, 16)
             .labelNames(
                 "cluster",
-                "command",
+                "command"
             ).register(registry)
 
         val completionLatency = Histogram.build("lettuce_command_latency", "latency metrics for lettuce commands in nanoseconds")
             .exponentialBuckets(100_000.0, 2.0, 16)
             .labelNames(
                 "cluster",
-                "command",
+                "command"
             ).register(registry)
     }
 

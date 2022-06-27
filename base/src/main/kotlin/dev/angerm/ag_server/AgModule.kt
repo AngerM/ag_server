@@ -37,7 +37,7 @@ class AgModule(
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
     private val rawYamlConfig: String = "",
-    private val modifyServer: (sb: ServerBuilder, config: Config) -> Unit = { _: ServerBuilder, _: Config -> },
+    private val modifyServer: (sb: ServerBuilder, config: Config) -> Unit = { _: ServerBuilder, _: Config -> }
 ) : AbstractModule() {
 
     override fun configure() {
@@ -83,7 +83,8 @@ class AgModule(
      * You shouldn't have to deal with it
      */
     class ArmeriaAddons {
-        @Inject(optional = true) val addons = setOf<ArmeriaAddon>()
+        @Inject(optional = true)
+        val addons = setOf<ArmeriaAddon>()
     }
 
     /**
@@ -91,7 +92,8 @@ class AgModule(
      * You shouldn't have to deal with it
      */
     class HttpDecorators {
-        @Inject(optional = true) val decorators = setOf<List<HttpDecorator>>()
+        @Inject(optional = true)
+        val decorators = setOf<List<HttpDecorator>>()
     }
 
     @Provides
@@ -128,7 +130,7 @@ class AgModule(
         if (environment.stage != Environment.Stage.Test) {
             sb.gracefulShutdownTimeout(
                 Duration.ofSeconds(config[BaseSpec.gracefulShutdownTimeSeconds]),
-                Duration.ofSeconds(config[BaseSpec.shutdownTimeoutSeconds]),
+                Duration.ofSeconds(config[BaseSpec.shutdownTimeoutSeconds])
             )
         }
         modifyServer(sb, config)
@@ -144,7 +146,7 @@ class AgModule(
     @Inject
     @Singleton
     fun getConfig(
-        specs: Set<ConfigSpec>,
+        specs: Set<ConfigSpec>
     ): Config {
         val combinedSource = listOf("", "${environment.serviceName}/").map {
                 prefix ->
