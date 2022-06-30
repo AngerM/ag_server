@@ -1,0 +1,6 @@
+plugins { }
+
+dependencies {
+    implementation gradleApi()
+    implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin'
+}
