@@ -39,7 +39,7 @@ subprojects {
             }
 
 
-            api platform("com.linecorp.armeria:armeria-bom:1.17.1")
+            api platform("com.linecorp.armeria:armeria-bom:1.17.2")
             ['armeria',
              'armeria-kotlin',
              'armeria-retrofit2',
