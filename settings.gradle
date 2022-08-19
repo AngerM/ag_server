@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'ag_server'
-include('base', 'grpc', 'redis', 'database', 'gradle-plugin')
+include('base', 'grpc', 'redis', 'database')
