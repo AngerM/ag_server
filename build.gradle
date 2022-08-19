@@ -8,6 +8,8 @@ subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
+    apply plugin: "org.jetbrains.dokka"
+    apply plugin: "org.jmailen.kotlinter"
 
     repositories {
         mavenLocal()
@@ -22,49 +24,42 @@ subprojects {
     dependencies {
         implementation platform('org.jetbrains.kotlin:kotlin-bom')
         api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    }
 
-    if (!project.name.equals("gradle-plugin")) {
-        apply plugin: "org.jetbrains.dokka"
-        apply plugin: "org.jmailen.kotlinter"
-
-        dependencies {
-            api 'org.jetbrains.kotlin:kotlin-reflect'
-            ['kotlinx-coroutines-core',
-             'kotlinx-coroutines-reactor',
-             'kotlinx-coroutines-jdk8',
-             'kotlinx-coroutines-slf4j',
-            ].each {
-                api "org.jetbrains.kotlinx:${it}:1.6.4"
-            }
-
-
-            api platform("com.linecorp.armeria:armeria-bom:1.18.0")
-            ['armeria',
-             'armeria-kotlin',
-             'armeria-retrofit2',
-             'armeria-rxjava3',
-            ].each {
-                api "com.linecorp.armeria:${it}"
-            }
-            api 'io.github.microutils:kotlin-logging-jvm:2.1.23'
-            api 'com.uchuhimo:konf:1.1.2'
-
-            ['simpleclient',
-             'simpleclient_hotspot',
-             'simpleclient_httpserver',
-            ].each {
-                api "io.prometheus:${it}:0.16.0"
-            }
-
-            api "com.google.inject:guice:5.1.0"
-
-            testImplementation 'org.jetbrains.kotlin:kotlin-test'
-            testImplementation(platform('org.junit:junit-bom:5.9.0'))
-            testImplementation('org.junit.jupiter:junit-jupiter')
-
-            dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.7.10"
+        api 'org.jetbrains.kotlin:kotlin-reflect'
+        ['kotlinx-coroutines-core',
+         'kotlinx-coroutines-reactor',
+         'kotlinx-coroutines-jdk8',
+         'kotlinx-coroutines-slf4j',
+        ].each {
+            api "org.jetbrains.kotlinx:${it}:1.6.4"
         }
+
+
+        api platform("com.linecorp.armeria:armeria-bom:1.18.0")
+        ['armeria',
+         'armeria-kotlin',
+         'armeria-retrofit2',
+         'armeria-rxjava3',
+        ].each {
+            api "com.linecorp.armeria:${it}"
+        }
+        api 'io.github.microutils:kotlin-logging-jvm:2.1.23'
+        api 'com.uchuhimo:konf:1.1.2'
+
+        ['simpleclient',
+         'simpleclient_hotspot',
+         'simpleclient_httpserver',
+        ].each {
+            api "io.prometheus:${it}:0.16.0"
+        }
+
+        api "com.google.inject:guice:5.1.0"
+
+        testImplementation 'org.jetbrains.kotlin:kotlin-test'
+        testImplementation(platform('org.junit:junit-bom:5.9.0'))
+        testImplementation('org.junit.jupiter:junit-jupiter')
+
+        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.7.10"
     }
 
     tasks.withType(JavaCompile) {
