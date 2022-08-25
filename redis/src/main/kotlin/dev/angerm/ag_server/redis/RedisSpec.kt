@@ -8,7 +8,8 @@ object RedisSpec : ConfigSpec("") {
         val uri: String? = null,
         val connectTimeoutMillis: Long = 5_000,
         val fixedTimeoutMillis: Long = 500,
-        val periodicRefreshTimerMillis: Long = 15_000
+        val periodicRefreshTimerMillis: Long = 15_000,
+        val dynamicRefreshSources: Boolean = false,
     )
     val redis by optional(mapOf<String, RedisConfig>())
 }
