@@ -52,7 +52,7 @@ class RedisModule : AbstractModule() {
             .refreshTriggersReconnectAttempts(3)
             .enablePeriodicRefresh(Duration.ofMillis(conf.periodicRefreshTimerMillis))
             .closeStaleConnections(true)
-            .dynamicRefreshSources(true)
+            .dynamicRefreshSources(false)
             .build()
         val clientOptions = getClientOptions(conf)
 
