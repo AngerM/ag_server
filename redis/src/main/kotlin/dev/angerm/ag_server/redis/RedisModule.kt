@@ -42,7 +42,6 @@ class RedisModule : AbstractModule() {
         return ClientOptions.builder()
             .timeoutOptions(timeoutOptions)
             .socketOptions(socketOptions)
-            .cancelCommandsOnReconnectFailure(true)
             .autoReconnect(true)
             .build()
     }
