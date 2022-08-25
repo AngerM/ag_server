@@ -50,13 +50,9 @@ class RedisModule : AbstractModule() {
         val clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
             .enableAllAdaptiveRefreshTriggers()
             .refreshTriggersReconnectAttempts(3)
+            .enablePeriodicRefresh(Duration.ofMillis(conf.periodicRefreshTimerMillis))
             .closeStaleConnections(true)
             .dynamicRefreshSources(conf.dynamicRefreshSources)
-            .apply {
-                if (conf.enablePeriodRefresh) {
-                    enablePeriodicRefresh(Duration.ofMillis(conf.periodicRefreshTimerMillis))
-                }
-            }
             .build()
         val clientOptions = getClientOptions(conf)
 

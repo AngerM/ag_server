@@ -8,7 +8,6 @@ object RedisSpec : ConfigSpec("") {
         val uri: String? = null,
         val connectTimeoutMillis: Long = 5_000,
         val fixedTimeoutMillis: Long = 500,
-        val enablePeriodRefresh: Boolean = true,
         val periodicRefreshTimerMillis: Long = 15_000,
         val dynamicRefreshSources: Boolean = false
     )
