@@ -111,7 +111,7 @@ class AgModule(
             port.close()
             sb.port(localPort, SessionProtocol.HTTP)
         }
-        sb.workerGroup(EventLoopGroups.newEventLoopGroup(config[BaseSpec.numWorkerThreads], "worker_", true), true)
+        sb.workerGroup(EventLoopGroups.newEventLoopGroup(config[BaseSpec.numWorkerThreads], "ag-worker", true), true)
         sb.maxConnectionAge(Duration.ofSeconds(config[BaseSpec.maxConnectionAgeSeconds]))
         sb.maxNumConnections(config[BaseSpec.maxNumConnections])
         config[BaseSpec.maxRequestLength]?.let {
