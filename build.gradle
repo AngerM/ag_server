@@ -140,10 +140,15 @@ subprojects {
     }
 
     jacocoTestReport {
+        dependsOn test
         reports {
-            xml.required = true
+            xml.enabled = true
+            html.enabled = false
+            xml.destination file("${buildDir}/reports/jacoco/report.xml")
         }
     }
+
+    check.dependsOn jacocoTestReport
 }
 
 def isNonStable = { String version ->
