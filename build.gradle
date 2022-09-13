@@ -3,6 +3,7 @@ plugins {
     id "org.jetbrains.dokka" version "1.7.10"
     id "org.jmailen.kotlinter" version "3.11.1"
     id "com.github.ben-manes.versions" version "0.42.0"
+    id 'jacoco'
 }
 subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -10,6 +11,7 @@ subprojects {
     apply plugin: 'signing'
     apply plugin: "org.jetbrains.dokka"
     apply plugin: "org.jmailen.kotlinter"
+    apply plugin: 'jacoco'
 
     repositories {
         mavenLocal()
@@ -136,6 +138,17 @@ subprojects {
     kotlinter {
         disabledRules = ["package-name", "no-wildcard-imports"]
     }
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.enabled = true
+            html.enabled = false
+            xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        }
+    }
+
+    check.dependsOn jacocoTestReport
 }
 
 def isNonStable = { String version ->
