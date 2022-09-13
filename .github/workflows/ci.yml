@@ -32,4 +32,4 @@ jobs:
       - name: CodeCov
         uses: codecov/codecov-action@v3
         with:
-          files: **/jacoco/report.xml
+          files: ./base/build/reports/jacoco/report.xml,./database/build/reports/jacoco/report.xml,./grpc/build/reports/jacoco/report.xml,./redis/build/reports/jacoco/report.xml
