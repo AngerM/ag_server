@@ -16,7 +16,7 @@ dependencies {
     ].each {
         implementation "dev.angerm.ag_server:${it}:1.2.0"
     }
-    implementation 'ch.qos.logback:logback-classic:1.2.10'
+    implementation 'ch.qos.logback:logback-classic:1.4.1'
 }
 
 application {
