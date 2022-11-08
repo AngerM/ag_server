@@ -16,7 +16,7 @@ dependencies {
     'grpc',
     'redis'
     ].each {
-        implementation "dev.angerm.ag_server:${it}:1.2.0
+        implementation "dev.angerm.ag_server:${it}:1.3.0
     }
 }
 ```
