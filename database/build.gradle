@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':base')
-    api group: 'org.springframework.data', name: 'spring-data-r2dbc', version: '3.0.0-SNAPSHOT'
+    api group: 'org.springframework.data', name: 'spring-data-r2dbc', version: '3.0.0'
     api group: 'io.r2dbc', name: 'r2dbc-pool', version: '1.0.0.RELEASE'
     testImplementation group:'io.r2dbc', name: 'r2dbc-h2', version:'1.0.0.RELEASE'
 }
