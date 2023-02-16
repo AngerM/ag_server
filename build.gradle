@@ -41,7 +41,7 @@ subprojects {
         }
 
 
-        api platform("com.linecorp.armeria:armeria-bom:1.21.0")
+        api platform("com.linecorp.armeria:armeria-bom:1.22.1")
         ['armeria',
          'armeria-kotlin',
          'armeria-retrofit2',
@@ -146,8 +146,8 @@ subprojects {
     jacocoTestReport {
         dependsOn test
         reports {
-            xml.enabled = true
-            html.enabled = false
+            xml.required = true
+            html.required = false
             xml.destination file("${buildDir}/reports/jacoco/report.xml")
         }
     }
