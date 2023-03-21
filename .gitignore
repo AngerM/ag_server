@@ -10,3 +10,4 @@ build
 .classpath
 bin
 dump.rdb
+.vim
