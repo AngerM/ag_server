@@ -15,7 +15,7 @@ class GrpcModule : AbstractModule() {
     @ProvidesIntoSet
     @Inject
     fun getBuilder(
-        impl: GrpcBuilder
+        impl: GrpcBuilder,
     ): ArmeriaAddon {
         return impl
     }

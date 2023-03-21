@@ -1,7 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.8.10'
     id "org.jetbrains.dokka" version "1.8.10"
-    id "org.jmailen.kotlinter" version "3.13.0"
+    id "org.jmailen.kotlinter" version "3.14.0"
     id "com.github.ben-manes.versions" version "0.46.0"
     id 'jacoco'
 }
@@ -137,10 +137,6 @@ subprojects {
         required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
         sign configurations.archives
         sign publishing.publications.agLibrary
-    }
-
-    kotlinter {
-        disabledRules = ["package-name", "no-wildcard-imports"]
     }
 
     jacocoTestReport {

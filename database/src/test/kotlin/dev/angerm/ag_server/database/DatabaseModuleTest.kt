@@ -24,7 +24,7 @@ class DatabaseModuleTest {
                    database: test
                    otherOptions:
                      someSpecificOption: testValue
-            """.trimIndent()
+            """.trimIndent(),
         ).from.env()
         val dbConfigs = config[DatabaseSpec.database]
         assertEquals(1, dbConfigs.size)
@@ -49,7 +49,7 @@ class DatabaseModuleTest {
                    driver: h2
                    protocol: mem 
                    database: test
-            """.trimIndent()
+            """.trimIndent(),
         ) { server ->
             val dbs = server.getInjector()?.getInstance(DbContainer::class.java)
             val client = dbs?.clients?.entries?.firstOrNull()?.value
@@ -59,7 +59,7 @@ class DatabaseModuleTest {
                 CREATE TABLE MY_TABLE(ID INT, NAME VARCHAR(255));
                 INSERT INTO MY_TABLE VALUES(1, 'USER1');
                 SELECT COUNT(*) FROM MY_TABLE;
-                """.trimIndent()
+                """.trimIndent(),
             ).fetch().awaitSingle().map {
                 it.value
             }.firstOrNull()
@@ -67,19 +67,19 @@ class DatabaseModuleTest {
 
             val conn = client.connectionFactory.create().awaitSingle()
             conn.createStatement(
-                "INSERT INTO MY_TABLE VALUES(1, 'USER1');"
+                "INSERT INTO MY_TABLE VALUES(1, 'USER1');",
             ).execute().awaitSingle()
             conn.createStatement(
-                "INSERT INTO MY_TABLE VALUES(2, 'USER2');"
+                "INSERT INTO MY_TABLE VALUES(2, 'USER2');",
             ).execute().awaitSingle()
             val result2 = conn.createStatement(
-                "SELECT COUNT(*) FROM MY_TABLE;"
+                "SELECT COUNT(*) FROM MY_TABLE;",
             ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
             assertEquals(3, result2 as Long)
 
             val conn2 = client.connectionFactory.create().awaitSingle()
             val result3 = conn2.createStatement(
-                "SELECT COUNT(*) FROM MY_TABLE;"
+                "SELECT COUNT(*) FROM MY_TABLE;",
             ).execute().awaitSingle().map { row, _ -> row.get(0) }.awaitSingle()
             assertEquals(3, result3 as Long)
         }

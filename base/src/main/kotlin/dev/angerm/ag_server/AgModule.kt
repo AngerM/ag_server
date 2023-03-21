@@ -37,7 +37,7 @@ class AgModule(
     private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
     private val rawYamlConfig: String = "",
-    private val modifyServer: (sb: ServerBuilder, config: Config) -> Unit = { _: ServerBuilder, _: Config -> }
+    private val modifyServer: (sb: ServerBuilder, config: Config) -> Unit = { _: ServerBuilder, _: Config -> },
 ) : AbstractModule() {
 
     override fun configure() {
@@ -100,7 +100,7 @@ class AgModule(
     @Inject
     @Singleton
     fun getBuilder(
-        config: Config
+        config: Config,
     ): ServerBuilder {
         val sb = Server.builder()
         if (!autoPort) {
@@ -130,7 +130,7 @@ class AgModule(
         if (environment.stage != Environment.Stage.Test) {
             sb.gracefulShutdownTimeout(
                 Duration.ofSeconds(config[BaseSpec.gracefulShutdownTimeSeconds]),
-                Duration.ofSeconds(config[BaseSpec.shutdownTimeoutSeconds])
+                Duration.ofSeconds(config[BaseSpec.shutdownTimeoutSeconds]),
             )
         }
         modifyServer(sb, config)
@@ -146,7 +146,7 @@ class AgModule(
     @Inject
     @Singleton
     fun getConfig(
-        specs: Set<ConfigSpec>
+        specs: Set<ConfigSpec>,
     ): Config {
         val combinedSource = listOf("", "${environment.serviceName}/").map {
                 prefix ->
@@ -169,7 +169,7 @@ class AgModule(
             Source.from.yaml.string(rawYamlConfig) +
                 combinedSource +
                 Source.from.systemProperties() +
-                Source.from.env()
+                Source.from.env(),
         ).validateRequired()
     }
 }

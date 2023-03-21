@@ -16,7 +16,7 @@ open class HealthService : HealthGrpc.HealthImplBase() {
                 } else {
                     HealthCheckResponse.ServingStatus.NOT_SERVING
                 }
-            }.build()
+            }.build(),
         )
         responseObserver?.onCompleted()
     }

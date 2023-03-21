@@ -17,7 +17,7 @@ object DatabaseSpec : ConfigSpec("") {
         val maxConnLifetimeMinutes: Long = 15,
         val maxConnIdleLifetimeMinutes: Long = 5,
         val maxConnAcquireTimeSeconds: Long = 5,
-        val otherOptions: Map<String, Any> = mapOf()
+        val otherOptions: Map<String, Any> = mapOf(),
     )
     val database by optional(mapOf<String, DatabaseConfig>())
 }

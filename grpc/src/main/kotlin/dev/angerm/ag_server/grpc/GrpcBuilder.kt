@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture
 
 class GrpcBuilder @Inject constructor(
     private val config: Config,
-    collectorRegistry: CollectorRegistry
+    collectorRegistry: CollectorRegistry,
 ) : ArmeriaAddon {
     interface Modifier {
         fun modify(builder: GrpcServiceBuilder, config: Config) {}
@@ -67,15 +67,15 @@ class GrpcBuilder @Inject constructor(
                     .allMetrics()
                     .withCollectorRegistry(collectorRegistry)
                     .withLabelHeaders(config[GrpcSpec.headersToLog])
-                    .withLatencyBuckets(Metrics.buckets)
-            )
+                    .withLatencyBuckets(Metrics.buckets),
+            ),
         )
     }
 
     private fun build(): GrpcService {
         bindableServices.forEach {
             builder.addService(
-                ServerInterceptors.intercept(it, defaultInterceptors.toList())
+                ServerInterceptors.intercept(it, defaultInterceptors.toList()),
             )
         }
         modifyGrpcBuilder?.modify(builder, config)

@@ -33,7 +33,7 @@ interface App {
     fun getHttpClient() = WebClient.of("http://${getLocalHostname()}")
     fun <T> getGrpcClient(klass: Class<T>) = Clients.newClient(
         "gproto+http://${getLocalHostname()}",
-        klass
+        klass,
     )
 
     companion object {
@@ -42,7 +42,7 @@ interface App {
             return Guice.createInjector(
                 env.getGuiceStage(),
                 AgModule(env),
-                *modules
+                *modules,
             )
         }
 
@@ -73,7 +73,7 @@ interface App {
             val injector = Guice.createInjector(
                 env.getGuiceStage(),
                 AgModule(env, registry = CollectorRegistry(), autoPort = true, rawYamlConfig = rawYamlConfig),
-                *modules
+                *modules,
             )
             val server = getServer(injector)
             server.start()
@@ -102,7 +102,7 @@ class AppImpl @Inject constructor(
     builder: ServerBuilder,
     handlers: Set<HttpHandler>,
     decorators: AgModule.HttpDecorators,
-    private val addons: AgModule.ArmeriaAddons
+    private val addons: AgModule.ArmeriaAddons,
 ) : App {
     private val shutdownTimeoutSeconds: Long = config[BaseSpec.shutdownTimeoutSeconds]
     private val server: Server
@@ -122,7 +122,7 @@ class AppImpl @Inject constructor(
         builder.decorator(
             SimpleHttpDecorator.Wrapper { _, ctx, _ ->
                 HttpMetricDecorator(ctx, metrics)
-            }
+            },
         )
         handlers.forEach {
             builder.annotatedService(it.pathPrefix, it)
@@ -143,7 +143,7 @@ class AppImpl @Inject constructor(
                 } finally {
                     logger.info("Shutdown complete!")
                 }
-            }
+            },
         )
         logger.info("Server build complete. Ready for use")
     }
@@ -162,7 +162,7 @@ class AppImpl @Inject constructor(
         }
         return CompletableFuture.allOf(
             *futures.toTypedArray(),
-            server.stop()
+            server.stop(),
         ).orTimeout(shutdownTimeoutSeconds, TimeUnit.SECONDS)
     }
 

@@ -7,7 +7,7 @@ class Environment(stageOverride: Stage? = null, serviceNameOverride: String? = n
         Prod("prod"),
         Staging("staging"),
         Local("local"),
-        Test("test")
+        Test("test"),
     }
     companion object {
         private val nameToEnv: Map<String, Stage> = Stage.values().associateBy {

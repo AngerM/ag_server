@@ -16,7 +16,7 @@ class RedisModuleTest {
                 uri: "redis://localhost:6379"
             secondary:
                 uri: "redis://localhost:6379"
-        """.trimIndent()
+        """.trimIndent(),
     ) { server ->
         val redis = RedisServer()
         try {

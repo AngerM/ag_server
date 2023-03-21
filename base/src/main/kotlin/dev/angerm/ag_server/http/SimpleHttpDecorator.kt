@@ -10,7 +10,7 @@ import com.linecorp.armeria.server.ServiceRequestContext
 abstract class SimpleHttpDecorator {
     class Wrapper(
         private val route: Route? = null,
-        private val factory: (HttpService, ServiceRequestContext, HttpRequest) -> SimpleHttpDecorator
+        private val factory: (HttpService, ServiceRequestContext, HttpRequest) -> SimpleHttpDecorator,
     ) : HttpDecorator {
         override fun forRoute(): Route {
             return route ?: super.forRoute()

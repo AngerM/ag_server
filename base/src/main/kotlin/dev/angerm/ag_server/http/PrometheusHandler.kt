@@ -50,13 +50,13 @@ class PrometheusHandler(private val registry: CollectorRegistry) : HttpHandler {
             format,
             writer,
             registry.filteredMetricFamilySamples(
-                parseQuery(query)
-            )
+                parseQuery(query),
+            ),
         )
         return HttpResponse.of(
             HttpStatus.OK,
             MediaType.parse(format),
-            writer.toString()
+            writer.toString(),
         )
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.r2dbc.core.DatabaseClient
 import java.time.Duration
 
 data class DbContainer(
-    val clients: Map<String, DatabaseClient>
+    val clients: Map<String, DatabaseClient>,
 )
 
 class DatabaseModule : AbstractModule() {
@@ -29,7 +29,7 @@ class DatabaseModule : AbstractModule() {
     @Inject
     @Singleton
     fun getDbs(
-        conf: Config
+        conf: Config,
     ): DbContainer {
         val dbConfigs = conf[DatabaseSpec.database]
         val clients = dbConfigs.map {

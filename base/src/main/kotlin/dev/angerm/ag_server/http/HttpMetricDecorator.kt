@@ -14,13 +14,13 @@ class HttpMetricDecorator(private val ctx: ServiceRequestContext, private val me
         metrics.httpCounter.labels(
             ctx.method().name,
             ctx.config().route().patternString(),
-            log.responseHeaders().status().codeAsText()
+            log.responseHeaders().status().codeAsText(),
         ).inc()
         val responseTime = Duration.ofNanos(log.responseDurationNanos())
         metrics.httpLatency.labels(
             ctx.method().name,
             ctx.config().route().patternString(),
-            log.responseHeaders().status().codeAsText()
+            log.responseHeaders().status().codeAsText(),
         ).observe(responseTime.toMillis() / 1000.0)
     }
 }

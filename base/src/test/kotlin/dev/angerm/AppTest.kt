@@ -29,7 +29,7 @@ class AppTest {
                 this.method(HttpMethod.GET)
                 this.path("/metrics")
                 this.header(HttpHeaderNames.ACCEPT, TextFormat.CONTENT_TYPE_OPENMETRICS_100)
-            }.build()
+            }.build(),
         ).aggregate().join()
         assertEquals(200, agg2.status().code())
         assert(agg2.content().toStringUtf8().contains("http_request_total"))
