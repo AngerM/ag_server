@@ -120,9 +120,7 @@ class AppImpl @Inject constructor(
         }
         // Insert this one last so its always first to run
         builder.decorator(
-            SimpleHttpDecorator.Wrapper { _, ctx, _ ->
-                HttpMetricDecorator(ctx, metrics)
-            },
+            SimpleHttpDecorator.Wrapper(simpleHttpDecorator = HttpMetricDecorator(metrics)),
         )
         handlers.forEach {
             builder.annotatedService(it.pathPrefix, it)

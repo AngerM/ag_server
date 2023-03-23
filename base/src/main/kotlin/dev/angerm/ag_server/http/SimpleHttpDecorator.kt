@@ -7,24 +7,23 @@ import com.linecorp.armeria.server.HttpService
 import com.linecorp.armeria.server.Route
 import com.linecorp.armeria.server.ServiceRequestContext
 
-abstract class SimpleHttpDecorator {
+open class SimpleHttpDecorator {
     class Wrapper(
         private val route: Route? = null,
-        private val factory: (HttpService, ServiceRequestContext, HttpRequest) -> SimpleHttpDecorator,
+        private val simpleHttpDecorator: SimpleHttpDecorator,
     ) : HttpDecorator {
         override fun forRoute(): Route {
             return route ?: super.forRoute()
         }
 
         override fun serve(delegate: HttpService, ctx: ServiceRequestContext, req: HttpRequest): HttpResponse {
-            val decorator = factory(delegate, ctx, req)
-            decorator.start()
+            simpleHttpDecorator.start(ctx, req)
             ctx.log().whenComplete().thenAccept { log ->
-                decorator.end(log)
+                simpleHttpDecorator.end(ctx, req, log)
             }
             return delegate.serve(ctx, req)
         }
     }
-    abstract fun start()
-    abstract fun end(log: RequestLog)
+    open fun start(ctx: ServiceRequestContext, req: HttpRequest) {}
+    open fun end(ctx: ServiceRequestContext, req: HttpRequest, log: RequestLog) {}
 }
