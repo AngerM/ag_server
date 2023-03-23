@@ -8,7 +8,7 @@ import dev.angerm.ag_server.utils.toSecondsAsDouble
 import java.time.Duration
 
 class HttpMetricDecorator(
-    private val metrics: Metrics
+    private val metrics: Metrics,
 ) : SimpleHttpDecorator() {
 
     override fun end(ctx: ServiceRequestContext, req: HttpRequest, log: RequestLog) {
