@@ -16,7 +16,7 @@ dependencies {
         api group: 'com.google.protobuf', name: "$it", version: '3.22.3'
     }
     api group: 'com.spotify', name: 'futures-extra', version: '4.3.1'
-    api group: 'com.google.api', name: 'api-common', version: '2.8.0'
+    api group: 'com.google.api', name: 'api-common', version: '2.9.0'
     api group: 'me.dinowernli', name: 'java-grpc-prometheus', version: '0.6.0'
 
     implementation project(':base')
