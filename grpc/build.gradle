@@ -7,16 +7,16 @@ dependencies {
      'grpc-core',
      'grpc-protobuf',
     ].each {
-        api group: 'io.grpc', name: "$it", version: "1.55.1"
+        api group: 'io.grpc', name: "$it", version: "1.57.1"
     }
     api group: 'io.grpc', name: 'grpc-kotlin-stub', version: '1.3.0', ext: 'pom'
     ['protobuf-java-util',
      'protobuf-kotlin'
     ].each {
-        api group: 'com.google.protobuf', name: "$it", version: '3.23.2'
+        api group: 'com.google.protobuf', name: "$it", version: '3.24.0'
     }
     api group: 'com.spotify', name: 'futures-extra', version: '4.3.1'
-    api group: 'com.google.api', name: 'api-common', version: '2.11.1'
+    api group: 'com.google.api', name: 'api-common', version: '2.15.0'
     api group: 'me.dinowernli', name: 'java-grpc-prometheus', version: '0.6.0'
 
     implementation project(':base')
