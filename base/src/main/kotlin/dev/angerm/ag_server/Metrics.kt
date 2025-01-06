@@ -1,11 +1,11 @@
 package dev.angerm.ag_server
 
 import com.google.inject.Inject
-import io.prometheus.client.CollectorRegistry
-import io.prometheus.client.Counter
-import io.prometheus.client.Histogram
+import io.prometheus.metrics.core.metrics.Counter
+import io.prometheus.metrics.core.metrics.Histogram
+import io.prometheus.metrics.model.registry.PrometheusRegistry
 
-class Metrics @Inject constructor(registry: CollectorRegistry) {
+class Metrics @Inject constructor(registry: PrometheusRegistry) {
     companion object {
         val buckets = arrayOf(
             0.001,
@@ -32,7 +32,7 @@ class Metrics @Inject constructor(registry: CollectorRegistry) {
             60.0,
         ).toDoubleArray()
     }
-    val httpCounter = Counter.Builder()
+    val httpCounter = Counter.builder()
         .name("http_request")
         .help("http request counters")
         .labelNames(
@@ -41,10 +41,10 @@ class Metrics @Inject constructor(registry: CollectorRegistry) {
             "status_code",
         ).register(registry)
 
-    val httpLatency = Histogram.Builder()
+    val httpLatency = Histogram.builder()
         .name("http_latency")
         .help("http request latency in seconds")
-        .buckets(*buckets)
+        .classicUpperBounds(*buckets)
         .labelNames(
             "http_method",
             "request_path",
