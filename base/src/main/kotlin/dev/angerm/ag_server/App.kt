@@ -12,7 +12,7 @@ import com.uchuhimo.konf.Config
 import dev.angerm.ag_server.http.HttpHandler
 import dev.angerm.ag_server.http.HttpMetricDecorator
 import dev.angerm.ag_server.http.SimpleHttpDecorator
-import io.prometheus.client.CollectorRegistry
+import io.prometheus.metrics.model.registry.PrometheusRegistry
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
@@ -72,7 +72,7 @@ interface App {
             val env = Environment(Environment.Stage.Test)
             val injector = Guice.createInjector(
                 env.getGuiceStage(),
-                AgModule(env, registry = CollectorRegistry(), autoPort = true, rawYamlConfig = rawYamlConfig),
+                AgModule(env, registry = PrometheusRegistry(), autoPort = true, rawYamlConfig = rawYamlConfig),
                 *modules,
             )
             val server = getServer(injector)
