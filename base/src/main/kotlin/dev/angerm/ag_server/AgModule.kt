@@ -16,9 +16,8 @@ import com.uchuhimo.konf.source.yaml
 import dev.angerm.ag_server.http.DefaultHandler
 import dev.angerm.ag_server.http.HttpDecorator
 import dev.angerm.ag_server.http.HttpHandler
-import dev.angerm.ag_server.http.PrometheusHandler
 import io.netty.channel.ChannelOption
-import io.prometheus.client.CollectorRegistry
+import io.prometheus.metrics.model.registry.PrometheusRegistry
 import java.net.ServerSocket
 import java.time.Duration
 import java.util.concurrent.Executors
@@ -34,14 +33,14 @@ import java.util.concurrent.Executors
 class AgModule(
     private val environment: Environment,
     private val defaultHandler: HttpHandler = DefaultHandler(),
-    private val registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
+    private val registry: PrometheusRegistry = PrometheusRegistry.defaultRegistry,
     private val autoPort: Boolean = false,
     private val rawYamlConfig: String = "",
     private val modifyServer: (sb: ServerBuilder, config: Config) -> Unit = { _: ServerBuilder, _: Config -> },
 ) : AbstractModule() {
 
     override fun configure() {
-        bind(CollectorRegistry::class.java).toInstance(registry)
+        bind(PrometheusRegistry::class.java).toInstance(registry)
         Multibinder.newSetBinder(binder(), HttpHandler::class.java).addBinding().toInstance(defaultHandler)
         bind(Environment::class.java).toInstance(environment)
     }
@@ -73,10 +72,6 @@ class AgModule(
      * }</pre>
      * @return a HttpHandler to add to the server
      */
-    @ProvidesIntoSet
-    fun getPromHttp(registry: CollectorRegistry): HttpHandler {
-        return PrometheusHandler(registry)
-    }
 
     /**
      * This is a simple wrapper class to work around some Guice stuff

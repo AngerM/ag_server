@@ -1,12 +1,17 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
-    id "org.jetbrains.dokka" version "1.8.20"
+    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
+    id "org.jetbrains.dokka" version "2.0.0"
     id "org.jmailen.kotlinter" version "3.16.0"
     id "com.github.ben-manes.versions" version "0.47.0"
     id 'jacoco'
 }
 
 allprojects {
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
     kotlin {
         jvmToolchain(17)
     }
@@ -37,11 +42,11 @@ subprojects {
          'kotlinx-coroutines-jdk8',
          'kotlinx-coroutines-slf4j',
         ].each {
-            api "org.jetbrains.kotlinx:${it}:1.7.3"
+            api "org.jetbrains.kotlinx:${it}:1.10.1"
         }
 
 
-        api platform("com.linecorp.armeria:armeria-bom:1.24.3")
+        api platform("com.linecorp.armeria:armeria-bom:1.31.3")
         ['armeria',
          'armeria-kotlin',
          'armeria-retrofit2',
@@ -52,20 +57,20 @@ subprojects {
         api 'io.github.microutils:kotlin-logging-jvm:3.0.5'
         api 'com.uchuhimo:konf:1.1.2'
 
-        ['simpleclient',
-         'simpleclient_hotspot',
-         'simpleclient_httpserver',
+        ['prometheus-metrics-core',
+        'prometheus-metrics-instrumentation-jvm',
+        'prometheus-metrics-exporter-httpserver'
         ].each {
-            api "io.prometheus:${it}:0.16.0"
+            api "io.prometheus:${it}:1.3.5"
         }
 
         api "com.google.inject:guice:7.0.0"
 
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
-        testImplementation(platform('org.junit:junit-bom:5.10.0'))
+        testImplementation(platform('org.junit:junit-bom:5.11.4'))
         testImplementation('org.junit.jupiter:junit-jupiter')
 
-        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.8.20"
+        dokkaHtmlPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0"
     }
 
     tasks.withType(JavaCompile) {
@@ -75,6 +80,12 @@ subprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
             jvmTarget = "17"
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        javaCompiler = javaToolchains.compilerFor {
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 
